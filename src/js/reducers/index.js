@@ -1,7 +1,13 @@
-const  reducer1 = (state = [], action) => {
+const  userActions = (state = LEFT, action) => {
     switch (action.type) {
-        case 'ACTION1':
-            return state.concat([action.payload]);
+        case SWIPELEFT:
+            return LEFT;
+        case SWIPERIGHT:
+            return RIGHT;
+        case SWIPEUP:
+            return UP;
+        case SWIPEDOWN:
+            return DOWN
         default:
             return state;
     }
@@ -18,7 +24,9 @@ const  reducer2 = (state = false, action) => {
 
 const app = (state = {}, action) => {
     return {
-        reducer1: reducer1(state.reducer1, action),
+        player: { 
+            direction: userActions(state.userActions, action)
+        },
         reducer2: reducer2(state.reducer2, action)
     }
 }
