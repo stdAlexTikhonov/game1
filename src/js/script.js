@@ -9,6 +9,7 @@ const main = () => {
         if (process) {
             time++;
             console.log("STEP:",time, "GAME IN PROGRESS")
+            console.log("DIRECTION:", player.direction);
         } else {
             console.log("GAME PAUSED")
         }
