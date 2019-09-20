@@ -1,4 +1,4 @@
-const  player = (state = LEFT, action) => {
+const  player = (state = { x: 0, y: 0, direction: LEFT }, action) => {
     switch (action.type) {
         case SWIPELEFT:
             return {
@@ -19,6 +19,16 @@ const  player = (state = LEFT, action) => {
             return {
                 ...state,
                 direction: DOWN
+            }
+        case SET_PLAYER_Y:
+            return {
+                ...state,
+                y: action.position
+            }
+        case SET_PLAYER_X:
+            return {
+                ...state,
+                x: action.position
             }
         default:
             return state;
