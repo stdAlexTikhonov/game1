@@ -23,3 +23,9 @@ const createStore = reducer => {
         dispatch
     }
 };
+
+const store = createStore(app);
+
+store.subscribe(() => {
+    console.log('The new state is: ', store.getState())
+});

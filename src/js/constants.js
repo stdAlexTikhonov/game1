@@ -1,3 +1,6 @@
+//config
+const FPS = 60;
+
 //directions
 const LEFT = 'LEFT';
 const RIGHT = 'RIGHT';
