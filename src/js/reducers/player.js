@@ -1,24 +1,37 @@
-const  player = (state = { x: 0, y: 0, direction: LEFT }, action) => {
+const initPlayer = { 
+    x: 0, 
+    y: 0, 
+    direction: DOWN, 
+    lastUserDirection: DOWN,
+    timer: 0 
+};
+
+const  player = (state = initPlayer, action) => {
     switch (action.type) {
         case SWIPELEFT:
             return {
                 ...state,
-                direction: LEFT
+                lastUserDirection: LEFT
             }
         case SWIPERIGHT:
             return {
                 ...state,
-                direction: RIGHT
+                lastUserDirection: RIGHT
             }
         case SWIPEUP:
             return {
                 ...state,
-                direction: UP
+                lastUserDirection: UP
             }
         case SWIPEDOWN:
             return {
                 ...state,
-                direction: DOWN
+                lastUserDirection: DOWN
+            }
+        case SET_DIRECTION:
+            return {
+                ...state,
+                direction: state.lastUserDirection
             }
         case SET_PLAYER_Y:
             return {
@@ -29,6 +42,11 @@ const  player = (state = { x: 0, y: 0, direction: LEFT }, action) => {
             return {
                 ...state,
                 x: action.position
+            }
+        case SET_TIMER:
+            return {
+                ...state,
+                timer: (state.timer + STEP) % CELL_WIDTH
             }
         default:
             return state;
