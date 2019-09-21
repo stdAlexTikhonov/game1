@@ -8,6 +8,11 @@ const main = () => {
 
         if (process) {
             time++;
+
+            //drawing==========================
+            clearWindow();
+
+            //logging==========================
             console.log("STEP:",time, "GAME IN PROGRESS")
             console.log("DIRECTION:", player.direction);
         } else {

@@ -1,5 +1,10 @@
 //config
 const FPS = 60;
+const WINDOW_WIDTH = 900;
+const WINDOW_HEIGHT = 700;
+const CELL_WIDTH = 100;
+const BACKGROUND = 'black';
+
 
 //directions
 const LEFT = 'LEFT';

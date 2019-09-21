@@ -3,15 +3,22 @@ const init = () => {
     window.requestAnimationFrame(main);
 }
 
+//drawing
+const clearWindow = () => {
+    context.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT); // clear canvas
+    context.fillStyle = BACKGROUND;
+    context.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+}
 
+
+//user actions
 let pointerX, pointerY;
-
-document.body.onpointerdown = e => {
+canvas.onpointerdown = e => {
     pointerX = e.offsetX;
     pointerY = e.offsetY;
 }
 
-document.body.onpointermove = e => {
+canvas.onpointermove = e => {
     const { player } = store.getState();
     const diffLeft = e.offsetX - pointerX;
     const diffUp = e.offsetY - pointerY;
