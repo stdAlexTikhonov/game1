@@ -30,6 +30,7 @@ const main = () => {
             time++;
             //drawing==========================
             clearWindow();
+            drawMap();
             drawPlayer();
             //logging==========================
             // console.log("STEP:",time, "GAME IN PROGRESS")

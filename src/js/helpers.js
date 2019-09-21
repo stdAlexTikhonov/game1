@@ -15,17 +15,21 @@ const drawPlayer = (val) => {
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
     switch(player.direction) {
-        case 'UP':
-            Y -= player.timer;
+        case UP:
+            if (MAP_[player.y-1][player.x] === 1) store.dispatch({type: RESET_DIRECTION});
+            else Y -= player.timer;
             break;
-        case 'DOWN':
-            Y += player.timer;
+        case DOWN:
+            if (MAP_[player.y+1][player.x] === 1) store.dispatch({type: RESET_DIRECTION});
+            else Y += player.timer;
             break;
-        case 'LEFT':
-            X -= player.timer;
+        case LEFT:
+            if (MAP_[player.y][player.x-1] === 1) store.dispatch({type: RESET_DIRECTION});
+            else X -= player.timer;
             break;
-        case 'RIGHT':
-            X += player.timer;
+        case RIGHT:
+            if (MAP_[player.y][player.x+1] === 1) store.dispatch({type: RESET_DIRECTION});
+            else X += player.timer;
             break;
     }
     context.beginPath();
@@ -36,6 +40,18 @@ const drawPlayer = (val) => {
     // ctx.lineWidth = 5;
     // ctx.strokeStyle = '#003300';
     // ctx.stroke();
+}
+
+const drawMap = () => {
+    context.fillStyle = WALL_COLOR;
+
+    MAP_.forEach((item,i) => {
+      item.forEach((elem,j) => {
+        if (elem === 1) { 
+          context.fillRect(CELL_WIDTH*j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
+        }
+      });
+    });
 }
 
 

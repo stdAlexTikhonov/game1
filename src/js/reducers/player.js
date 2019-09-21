@@ -1,6 +1,6 @@
 const initPlayer = { 
-    x: 0, 
-    y: 0, 
+    x: 1, 
+    y: 1, 
     direction: null, 
     lastUserDirection: null,
     timer: 0 
@@ -47,6 +47,12 @@ const  player = (state = initPlayer, action) => {
             return {
                 ...state,
                 timer: (state.timer + STEP) % CELL_WIDTH
+            }
+        case RESET_DIRECTION:
+            return {
+                ...state,
+                direction: null,
+                lastUserDirection: null
             }
         default:
             return state;
