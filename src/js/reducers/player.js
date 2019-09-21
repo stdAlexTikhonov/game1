@@ -1,8 +1,8 @@
 const initPlayer = { 
     x: 0, 
     y: 0, 
-    direction: DOWN, 
-    lastUserDirection: DOWN,
+    direction: null, 
+    lastUserDirection: null,
     timer: 0 
 };
 
