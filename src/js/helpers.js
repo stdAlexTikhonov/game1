@@ -10,7 +10,7 @@ const clearWindow = () => {
     context.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 }
 
-const drawPlayer = (val) => {
+const drawPlayer = () => {
     const { player } = store.getState();
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
@@ -40,6 +40,33 @@ const drawPlayer = (val) => {
     // ctx.lineWidth = 5;
     // ctx.strokeStyle = '#003300';
     // ctx.stroke();
+}
+
+const drawGhost = () => {
+    const { ghost1, player } = store.getState();
+    let X = ghost1.x * CELL_WIDTH;
+    let Y = ghost1.y * CELL_WIDTH;
+
+    switch(ghost1.currentStep) {
+        case UP:
+            Y -= player.timer;
+            break;
+        case DOWN:
+            Y += player.timer;
+            break;
+        case LEFT:
+            X -= player.timer;
+            break;
+        case RIGHT:
+            X += player.timer;
+            break;
+    }
+
+    context.beginPath();
+    context.fillStyle = 'blue';
+    context.rect(X, Y, CELL_WIDTH, CELL_WIDTH);
+    context.fill();
+    context.closePath();
 }
 
 const drawMap = () => {

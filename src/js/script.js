@@ -1,16 +1,17 @@
-let time = 0;
 let frames = 0;
 
 const main = () => {
     if (frames % FPS === 0) {
         store.dispatch({type: SET_TIMER});
-        const { game, player } = store.getState();
+        const { game, player, ghost1 } = store.getState();
         const { history, process } = game;
 
         if (process) {
 
             if (player.timer === 0) {
+                store.dispatch({type: SET_GHOST_DIRECTION});
                 store.dispatch({type: SET_DIRECTION});
+
                 switch(player.direction) {
                     case LEFT:
                         store.dispatch({type: SET_PLAYER_X, position: player.x - 1});
@@ -27,11 +28,11 @@ const main = () => {
                 }
             }
             
-            time++;
             //drawing==========================
             clearWindow();
             drawMap();
             drawPlayer();
+            drawGhost();
             //logging==========================
             // console.log("STEP:",time, "GAME IN PROGRESS")
             // console.log("DIRECTION:", player.direction);
