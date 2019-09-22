@@ -3,7 +3,7 @@ let frames = 0;
 const main = () => {
     if (frames % FPS === 0) {
         store.dispatch({type: SET_TIMER});
-        const { game, ghost1 } = store.getState();
+        const { game, ghost1, player } = store.getState();
         const { history, process } = game;
 
         if (process) {

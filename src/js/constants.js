@@ -23,6 +23,8 @@ const MAP_ = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ];
 
+const FINDING_GRAPH = new Graph(MAP_);
+
 
 //directions
 const LEFT = 'LEFT';
