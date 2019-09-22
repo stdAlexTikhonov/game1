@@ -7,25 +7,10 @@ const main = () => {
         const { history, process } = game;
 
         if (process) {
-
+            
             if (player.timer === 0) {
                 store.dispatch({type: SET_GHOST_DIRECTION});
                 store.dispatch({type: SET_DIRECTION});
-
-                switch(player.direction) {
-                    case LEFT:
-                        store.dispatch({type: SET_PLAYER_X, position: player.x - 1});
-                        break;
-                    case RIGHT:
-                        store.dispatch({type: SET_PLAYER_X, position: player.x + 1});
-                        break;
-                    case UP:
-                        store.dispatch({type: SET_PLAYER_Y, position: player.y - 1});
-                        break;
-                    case DOWN:
-                        store.dispatch({type: SET_PLAYER_Y, position: player.y + 1});
-                        break;
-                }
             }
             
             //drawing==========================
