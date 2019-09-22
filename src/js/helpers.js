@@ -16,19 +16,19 @@ const drawPlayer = () => {
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
     switch(player.direction) {
         case UP:
-            if (MAP_[player.y-1][player.x] === 1) store.dispatch({type: RESET_DIRECTION});
+            if (MAP_[player.y-1][player.x] === 0) store.dispatch({type: RESET_DIRECTION});
             else Y -= game.timer;
             break;
         case DOWN:
-            if (MAP_[player.y+1][player.x] === 1) store.dispatch({type: RESET_DIRECTION});
+            if (MAP_[player.y+1][player.x] === 0) store.dispatch({type: RESET_DIRECTION});
             else Y += game.timer;
             break;
         case LEFT:
-            if (MAP_[player.y][player.x-1] === 1) store.dispatch({type: RESET_DIRECTION});
+            if (MAP_[player.y][player.x-1] === 0) store.dispatch({type: RESET_DIRECTION});
             else X -= game.timer;
             break;
         case RIGHT:
-            if (MAP_[player.y][player.x+1] === 1) store.dispatch({type: RESET_DIRECTION});
+            if (MAP_[player.y][player.x+1] === 0) store.dispatch({type: RESET_DIRECTION});
             else X += game.timer;
             break;
     }
@@ -74,7 +74,7 @@ const drawMap = () => {
 
     MAP_.forEach((item,i) => {
       item.forEach((elem,j) => {
-        if (elem === 1) { 
+        if (elem === 0) { 
           context.fillRect(CELL_WIDTH*j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
         }
       });
