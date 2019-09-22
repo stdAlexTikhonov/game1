@@ -51,17 +51,6 @@ const  player = (state = initPlayer, action) => {
                 y
             }
         }
-
-        case SET_PLAYER_Y:
-            return {
-                ...state,
-                y: action.position
-            }
-        case SET_PLAYER_X:
-            return {
-                ...state,
-                x: action.position
-            }
         case SET_TIMER:
             return {
                 ...state,
