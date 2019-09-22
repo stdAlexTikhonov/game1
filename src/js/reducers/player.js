@@ -2,8 +2,7 @@ const initPlayer = {
     x: 1, 
     y: 1, 
     direction: null, 
-    lastUserDirection: null,
-    timer: 0 
+    lastUserDirection: null
 };
 
 const  player = (state = initPlayer, action) => {
@@ -51,11 +50,6 @@ const  player = (state = initPlayer, action) => {
                 y
             }
         }
-        case SET_TIMER:
-            return {
-                ...state,
-                timer: (state.timer + STEP) % CELL_WIDTH
-            }
         case RESET_DIRECTION:
             return {
                 ...state,

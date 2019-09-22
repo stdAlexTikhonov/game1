@@ -11,25 +11,25 @@ const clearWindow = () => {
 }
 
 const drawPlayer = () => {
-    const { player } = store.getState();
+    const { player, game } = store.getState();
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
     switch(player.direction) {
         case UP:
             if (MAP_[player.y-1][player.x] === 1) store.dispatch({type: RESET_DIRECTION});
-            else Y -= player.timer;
+            else Y -= game.timer;
             break;
         case DOWN:
             if (MAP_[player.y+1][player.x] === 1) store.dispatch({type: RESET_DIRECTION});
-            else Y += player.timer;
+            else Y += game.timer;
             break;
         case LEFT:
             if (MAP_[player.y][player.x-1] === 1) store.dispatch({type: RESET_DIRECTION});
-            else X -= player.timer;
+            else X -= game.timer;
             break;
         case RIGHT:
             if (MAP_[player.y][player.x+1] === 1) store.dispatch({type: RESET_DIRECTION});
-            else X += player.timer;
+            else X += game.timer;
             break;
     }
     context.beginPath();
@@ -43,22 +43,22 @@ const drawPlayer = () => {
 }
 
 const drawGhost = () => {
-    const { ghost1, player } = store.getState();
+    const { ghost1, game } = store.getState();
     let X = ghost1.x * CELL_WIDTH;
     let Y = ghost1.y * CELL_WIDTH;
 
     switch(ghost1.currentStep) {
         case UP:
-            Y -= player.timer;
+            Y -= game.timer;
             break;
         case DOWN:
-            Y += player.timer;
+            Y += game.timer;
             break;
         case LEFT:
-            X -= player.timer;
+            X -= game.timer;
             break;
         case RIGHT:
-            X += player.timer;
+            X += game.timer;
             break;
     }
 
