@@ -1,6 +1,6 @@
 const init = () => {
     store.dispatch({type: START});
-    store.dispatch({type: SET_GHOST_DIRECTION});
+    store.dispatch({type: SET_HUNTER_DIRECTION});
     window.requestAnimationFrame(main);
 }
 
@@ -35,7 +35,7 @@ const drawPlayer = () => {
     }
     context.beginPath();
     context.arc(X, Y, CELL_WIDTH/2, 0, 2 * Math.PI, false);
-    context.fillStyle = 'yellow';
+    context.fillStyle = PLAYER_COLOR;
     context.fill();
     context.closePath();
     // ctx.lineWidth = 5;
@@ -44,17 +44,17 @@ const drawPlayer = () => {
 }
 
 const findPath = () => {
-    const { ghost1, player } = store.getState();
-    const FSTART = FINDING_GRAPH.grid[ghost1.y][ghost1.x];
+    const { hunter, player } = store.getState();
+    const FSTART = FINDING_GRAPH.grid[hunter.y][hunter.x];
     const FEND = FINDING_GRAPH.grid[player.y][player.x];
     const PATH = astar.search(FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
     
     return PATH.map((item,i) => {
         if (i === 0) {
-            if (item.x > ghost1.x) return RIGHT;
-            else if (item.x < ghost1.x) return LEFT;
-            else if (item.y > ghost1.y) return DOWN;
-            else if (item.y < ghost1.y) return UP;
+            if (item.x > hunter.x) return RIGHT;
+            else if (item.x < hunter.x) return LEFT;
+            else if (item.y > hunter.y) return DOWN;
+            else if (item.y < hunter.y) return UP;
         } else {
             if (item.x > PATH[i-1].x) return RIGHT;
             else if (item.x < PATH[i-1].x) return LEFT;
@@ -65,17 +65,17 @@ const findPath = () => {
 }
 
 const drawGhost = () => {
-    const { ghost1, game } = store.getState();
+    const { hunter, game } = store.getState();
     
-    if (!ghost1.currentStep) {
+    if (!hunter.currentStep) {
         const PATH = findPath();
         store.dispatch({type: SET_PATH, path: PATH});
     }
   
-    let X = ghost1.x * CELL_WIDTH;
-    let Y = ghost1.y * CELL_WIDTH;
+    let X = hunter.x * CELL_WIDTH;
+    let Y = hunter.y * CELL_WIDTH;
 
-    switch(ghost1.currentStep) {
+    switch(hunter.currentStep) {
         case UP:
             Y -= game.timer;
             break;
@@ -91,19 +91,28 @@ const drawGhost = () => {
     }
 
     context.beginPath();
-    context.fillStyle = 'blue';
+    context.fillStyle = HUNTER_COLOR;
     context.rect(X, Y, CELL_WIDTH, CELL_WIDTH);
     context.fill();
     context.closePath();
 }
 
 const drawMap = () => {
-    context.fillStyle = WALL_COLOR;
+    const { player } = store.getState();
 
     MAP_.forEach((item,i) => {
       item.forEach((elem,j) => {
         if (elem === 0) { 
-          context.fillRect(CELL_WIDTH*j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
+            context.fillStyle = WALL_COLOR;
+            context.fillRect(CELL_WIDTH*j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
+        } else {
+            if (!player.foodMap[`${i + '' + j}`]) {
+                context.beginPath();
+                context.arc(CELL_WIDTH*j + CELL_WIDTH/2, CELL_WIDTH * i + CELL_WIDTH/2, FOOD_SIZE, 0, 2 * Math.PI, false);
+                context.fillStyle = FOOD_COLOR;
+                context.fill();
+                context.closePath();
+            }
         }
       });
     });

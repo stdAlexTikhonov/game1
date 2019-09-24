@@ -1,4 +1,4 @@
-const game = (state = { history: [], process: false, timer: 0}, action) => {
+const gameReducer = (state = { history: [], process: false, timer: 0}, action) => {
     switch (action.type) {
         case SAVE:
             return Object.assign(state, { history: state.history.concat([action.payload])});

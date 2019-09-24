@@ -1,11 +1,11 @@
-const ghost1 = (state = { x: 7, y: 7, path: [RIGHT,DOWN,LEFT,UP], currentStep: null}, action) => {
+const hunterReducer = (state = { x: 7, y: 7, path: [], currentStep: null}, action) => {
     switch(action.type) {
         case SET_PATH:
             return {
                 ...state,
                 path: action.path
             }
-        case SET_GHOST_DIRECTION: 
+        case SET_HUNTER_DIRECTION: 
             return {
                 ...state,
                 currentStep: state.path.shift() 
