@@ -11,7 +11,7 @@ const main = () => {
             
             if (game.timer === 0) {
                 store.dispatch({type: SET_HUNTER_POSITION});
-                store.dispatch({type: SET_GHOST_DIRECTION});
+                store.dispatch({type: SET_HUNTER_DIRECTION});
                 store.dispatch({type: SET_DIRECTION}); 
             }
             

@@ -5,7 +5,7 @@ const initPlayer = {
     lastUserDirection: null
 };
 
-const  player = (state = initPlayer, action) => {
+const  playerReducer = (state = initPlayer, action) => {
     switch (action.type) {
         case SWIPELEFT:
             return {
