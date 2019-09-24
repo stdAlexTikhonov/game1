@@ -2,7 +2,9 @@ const initPlayer = {
     x: 1, 
     y: 1, 
     direction: null, 
-    lastUserDirection: null
+    lastUserDirection: null,
+    points: 0,
+    foodMap: {}
 };
 
 const  playerReducer = (state = initPlayer, action) => {
@@ -46,6 +48,7 @@ const  playerReducer = (state = initPlayer, action) => {
             return {
                 ...state,
                 direction: lastUserDirection,
+                foodMap: Object.assign(state.foodMap, { [`${y + '' + x}`]: true}),
                 x,
                 y
             }

@@ -35,7 +35,7 @@ const drawPlayer = () => {
     }
     context.beginPath();
     context.arc(X, Y, CELL_WIDTH/2, 0, 2 * Math.PI, false);
-    context.fillStyle = 'yellow';
+    context.fillStyle = PLAYER_COLOR;
     context.fill();
     context.closePath();
     // ctx.lineWidth = 5;
@@ -91,19 +91,28 @@ const drawGhost = () => {
     }
 
     context.beginPath();
-    context.fillStyle = 'blue';
+    context.fillStyle = HUNTER_COLOR;
     context.rect(X, Y, CELL_WIDTH, CELL_WIDTH);
     context.fill();
     context.closePath();
 }
 
 const drawMap = () => {
-    context.fillStyle = WALL_COLOR;
+    const { player } = store.getState();
 
     MAP_.forEach((item,i) => {
       item.forEach((elem,j) => {
         if (elem === 0) { 
-          context.fillRect(CELL_WIDTH*j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
+            context.fillStyle = WALL_COLOR;
+            context.fillRect(CELL_WIDTH*j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
+        } else {
+            if (!player.foodMap[`${i + '' + j}`]) {
+                context.beginPath();
+                context.arc(CELL_WIDTH*j + CELL_WIDTH/2, CELL_WIDTH * i + CELL_WIDTH/2, FOOD_SIZE, 0, 2 * Math.PI, false);
+                context.fillStyle = FOOD_COLOR;
+                context.fill();
+                context.closePath();
+            }
         }
       });
     });
