@@ -64,7 +64,7 @@ const findPath = () => {
     });
 }
 
-const drawGhost = () => {
+const drawHunter = () => {
     
     const { hunter: hunter1 } = store.getState();
     if (!hunter1.currentStep) {

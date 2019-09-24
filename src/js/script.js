@@ -19,7 +19,7 @@ const main = () => {
             clearWindow();
             drawMap();
             drawPlayer();
-            drawGhost();
+            drawHunter();
             showPoints();
             //logging==========================
             // console.log("STEP:",time, "GAME IN PROGRESS")
