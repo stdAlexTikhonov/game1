@@ -65,12 +65,15 @@ const findPath = () => {
 }
 
 const drawGhost = () => {
-    const { hunter, game } = store.getState();
     
-    if (!hunter.currentStep) {
+    const { hunter: hunter1 } = store.getState();
+    if (!hunter1.currentStep) {
         const PATH = findPath();
         store.dispatch({type: SET_PATH, path: PATH});
+        store.dispatch({type: SET_HUNTER_DIRECTION});
     }
+
+    const { hunter, game } = store.getState();
   
     let X = hunter.x * CELL_WIDTH;
     let Y = hunter.y * CELL_WIDTH;
