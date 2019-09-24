@@ -97,6 +97,11 @@ const drawGhost = () => {
     context.closePath();
 }
 
+const showPoints = () => {
+    const { player } = store.getState();
+    score.innerHTML = player.points;
+}
+
 const drawMap = () => {
     const { player } = store.getState();
 
@@ -106,7 +111,7 @@ const drawMap = () => {
             context.fillStyle = WALL_COLOR;
             context.fillRect(CELL_WIDTH*j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
         } else {
-            if (!player.foodMap[`${i + '' + j}`]) {
+            if (!player.foodMap.includes(`${i + '' + j}`)) {
                 context.beginPath();
                 context.arc(CELL_WIDTH*j + CELL_WIDTH/2, CELL_WIDTH * i + CELL_WIDTH/2, FOOD_SIZE, 0, 2 * Math.PI, false);
                 context.fillStyle = FOOD_COLOR;

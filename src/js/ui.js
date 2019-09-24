@@ -41,6 +41,15 @@ canvas.style.margin = 'auto';
 canvas.width = WINDOW_WIDTH;
 canvas.height = WINDOW_HEIGHT;
 document.body.appendChild(canvas);
+
+//score block
+const score = document.createElement('div');
+score.style.fontFamily = 'Tahoma';
+score.style.fontWeight = 'Bold';
+score.innerHTML = 0;
+document.body.appendChild(score);
+
+
 const context = canvas.getContext('2d');
 
 canvas.onpointerdown = onCanvasDownHandler;

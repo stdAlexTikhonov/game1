@@ -4,7 +4,7 @@ const initPlayer = {
     direction: null, 
     lastUserDirection: null,
     points: 0,
-    foodMap: {}
+    foodMap: ['11']
 };
 
 const  playerReducer = (state = initPlayer, action) => {
@@ -45,10 +45,13 @@ const  playerReducer = (state = initPlayer, action) => {
                     y += 1;
                     break;
             }
+
+    
             return {
                 ...state,
                 direction: lastUserDirection,
-                foodMap: Object.assign(state.foodMap, { [`${y + '' + x}`]: true}),
+                points: state.direction && !state.foodMap.includes(`${y + '' + x}`) ? state.points + 1 : state.points,
+                foodMap: state.foodMap.includes(`${y + '' + x}`) ? state.foodMap : state.foodMap.concat([`${y + '' + x}`]),
                 x,
                 y
             }

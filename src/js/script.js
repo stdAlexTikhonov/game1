@@ -20,6 +20,7 @@ const main = () => {
             drawMap();
             drawPlayer();
             drawGhost();
+            showPoints();
             //logging==========================
             // console.log("STEP:",time, "GAME IN PROGRESS")
             // console.log("DIRECTION:", player.direction);
