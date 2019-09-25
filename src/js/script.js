@@ -27,6 +27,8 @@ const main = () => {
             // console.log("POS timer: ", player.timer);
 
         } else {
+            container.style.display = 'flex';
+            score.style.display = 'none';
             console.log("GAME PAUSED")
         }
 

@@ -3,9 +3,12 @@ const gameReducer = (state = { history: [], process: false, timer: 0}, action) =
         case SAVE:
             return Object.assign(state, { history: state.history.concat([action.payload])});
         case START: 
-            return Object.assign(state, { 'process': true})
+            return Object.assign(state, { 'process': true});
         case STOP:
-            return Object.assign(state, { 'process': false})
+            return {
+                ...state,
+                process: false
+            }
         case SET_TIMER:
             return {
                 ...state,

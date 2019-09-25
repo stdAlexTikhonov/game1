@@ -1,5 +1,7 @@
 //styles
 document.body.style.display = 'flex';
+document.body.style.margin = 0;
+document.body.style.padding = 0;
 
 //container
 const container = document.createElement('div');
