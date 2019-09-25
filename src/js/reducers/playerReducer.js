@@ -43,10 +43,22 @@ const  playerReducer = (state = initPlayer, action) => {
                     }
                     break;
                 case RIGHT:
-                    x += 1;
+                    if (MAP_[state.y+1][state.x+1] === 1 && MAP_[state.y][state.x+1] === 0) {
+                        y += 1;
+                    } else if (MAP_[state.y-1][state.x+1] === 1 && MAP_[state.y][state.x+1] === 0) {
+                        y -= 1;
+                    } else {
+                        x += 1;
+                    }
                     break;
                 case UP:
-                    y -= 1;
+                    if (MAP_[state.y-1][state.x+1] === 1 && MAP_[state.y-1][state.x] === 0) {
+                        x += 1;
+                    } else if (MAP_[state.y-1][state.x-1] === 1 && MAP_[state.y-1][state.x] === 0) {
+                        x -= 1;
+                    } else {
+                        y -= 1
+                    }
                     break;
                 case DOWN:
                     if (MAP_[state.y+1][state.x+1] === 1 && MAP_[state.y+1][state.x] === 0) {
