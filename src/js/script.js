@@ -19,8 +19,8 @@ const main = () => {
             clearWindow();
             drawMap();
             drawPlayer();
-            drawHunter();
-            showPoints();
+            // drawHunter();
+            // showPoints();
             //logging==========================
             // console.log("STEP:",time, "GAME IN PROGRESS")
             // console.log("DIRECTION:", player.direction);

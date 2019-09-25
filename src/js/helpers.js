@@ -15,17 +15,33 @@ const drawPlayer = () => {
     const { player, game } = store.getState();
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
+  
     switch(player.direction) {
         case UP:
-            if (MAP_[player.y-1][player.x] === 0) store.dispatch({type: RESET_DIRECTION});
+            if (MAP_[player.y-1][player.x] === 0) {
+                store.dispatch({type: RESET_DIRECTION});
+            }
             else Y -= game.timer;
             break;
         case DOWN:
-            if (MAP_[player.y+1][player.x] === 0) store.dispatch({type: RESET_DIRECTION});
+         
+            if (MAP_[player.y+1][player.x] === 0) { 
+                if (MAP_[player.y+1][player.x+1] === 1) {
+                    X += game.timer;
+                } else if (MAP_[player.y+1][player.x-1] === 1) {
+                    X -= game.timer;
+                } else store.dispatch({type: RESET_DIRECTION});
+            }
             else Y += game.timer;
             break;
         case LEFT:
-            if (MAP_[player.y][player.x-1] === 0) store.dispatch({type: RESET_DIRECTION});
+            if (MAP_[player.y][player.x-1] === 0) {
+                if (MAP_[player.y+1][player.x-1] === 1) {
+                    Y += game.timer;
+                } else if (MAP_[player.y-1][player.x-1] === 1) {
+                    Y -= game.timer;
+                } else store.dispatch({type: RESET_DIRECTION});
+            }
             else X -= game.timer;
             break;
         case RIGHT:
