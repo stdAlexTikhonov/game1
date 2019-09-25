@@ -19,41 +19,45 @@ const drawPlayer = () => {
     switch(player.direction) {
         case UP:
             if (MAP_[player.y-1][player.x] === 0) {
+                if (player.previousDirection === UP) store.dispatch({type: RESET_DIRECTION});
                 if (MAP_[player.y-1][player.x+1] === 1) {
                     X += game.timer;
                 } else if (MAP_[player.y-1][player.x-1] === 1) {
                     X -= game.timer;
-                } else store.dispatch({type: RESET_DIRECTION});
+                }
             }
             else Y -= game.timer;
             break;
         case DOWN:
-            if (MAP_[player.y+1][player.x] === 0) { 
-                if (MAP_[player.y+1][player.x+1] === 1) {
+            if (MAP_[player.y+1][player.x] === 0) {
+                if (player.previousDirection === DOWN) store.dispatch({type: RESET_DIRECTION});
+                else if (MAP_[player.y+1][player.x+1] === 1) {
                     X += game.timer;
                 } else if (MAP_[player.y+1][player.x-1] === 1) {
                     X -= game.timer;
-                } else store.dispatch({type: RESET_DIRECTION});
+                }
             }
             else Y += game.timer;
             break;
         case LEFT:
             if (MAP_[player.y][player.x-1] === 0) {
-                if (MAP_[player.y+1][player.x-1] === 1) {
+                if (player.previousDirection === LEFT) store.dispatch({type: RESET_DIRECTION});
+                else if (MAP_[player.y+1][player.x-1] === 1) {
                     Y += game.timer;
                 } else if (MAP_[player.y-1][player.x-1] === 1) {
                     Y -= game.timer;
-                } else store.dispatch({type: RESET_DIRECTION});
+                }
             }
             else X -= game.timer;
             break;
         case RIGHT:
             if (MAP_[player.y][player.x+1] === 0) {
-                if (MAP_[player.y+1][player.x+1] === 1) {
+                if (player.previousDirection === RIGHT) store.dispatch({type: RESET_DIRECTION});
+                else if (MAP_[player.y+1][player.x+1] === 1) {
                     Y += game.timer;
                 } else if (MAP_[player.y-1][player.x+1] === 1) {
                     Y -= game.timer;
-                } else store.dispatch({type: RESET_DIRECTION});
+                }
             }
             else X += game.timer;
             break;
