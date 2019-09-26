@@ -34,40 +34,41 @@ const  playerReducer = (state = initPlayer, action) => {
             let {x, y, lastUserDirection} = state;
             switch(state.direction) {
                 case LEFT:
-                    if (MAP_[state.y+1][state.x-1] === 1 && MAP_[state.y][state.x-1] === 0) {
-                        y += 1;
-                    } else if (MAP_[state.y-1][state.x-1] === 1 && MAP_[state.y][state.x-1] === 0) {
-                        y -= 1;
-                    } else {
-                        x -= 1;
-                    }
+                    if (MAP_[state.y][state.x-1] === 0) {
+                        if (MAP_[state.y+1][state.x-1] === 1) {
+                            y += 1;
+                        } else if (MAP_[state.y-1][state.x-1] === 1) {
+                            y -= 1;
+                        } 
+                    } else x -= 1
                     break;
                 case RIGHT:
-                    if (MAP_[state.y+1][state.x+1] === 1 && MAP_[state.y][state.x+1] === 0) {
-                        y += 1;
-                    } else if (MAP_[state.y-1][state.x+1] === 1 && MAP_[state.y][state.x+1] === 0) {
-                        y -= 1;
-                    } else {
-                        x += 1;
-                    }
+                    if (MAP_[state.y][state.x+1] === 0) {
+                        if (MAP_[state.y+1][state.x+1] === 1) {
+                            y += 1;
+                        } else if (MAP_[state.y-1][state.x+1] === 1) {
+                            y -= 1;
+                        } 
+                    } else x += 1;
                     break;
                 case UP:
-                    if (MAP_[state.y-1][state.x+1] === 1 && MAP_[state.y-1][state.x] === 0) {
-                        x += 1;
-                    } else if (MAP_[state.y-1][state.x-1] === 1 && MAP_[state.y-1][state.x] === 0) {
-                        x -= 1;
-                    } else {
-                        y -= 1
-                    }
+                    if (MAP_[state.y-1][state.x] === 0) {
+                        if (MAP_[state.y-1][state.x+1] === 1) {
+                            x += 1;
+                        } else if (MAP_[state.y-1][state.x-1] === 1) {
+                            x -= 1;
+                        }
+                    } else y -= 1;
                     break;
                 case DOWN:
-                    if (MAP_[state.y+1][state.x+1] === 1 && MAP_[state.y+1][state.x] === 0) {
-                        x += 1;
-                    } else if (MAP_[state.y+1][state.x-1] === 1 && MAP_[state.y+1][state.x] === 0) {
-                        x -= 1;
-                    } else {
-                        y += 1
-                    }
+                    if (MAP_[state.y+1][state.x] === 0) {
+                        if (MAP_[state.y+1][state.x+1] === 1) {
+                            x += 1;
+                        } else if (MAP_[state.y+1][state.x-1] === 1) {
+                            x -= 1;
+                        }
+                    } else y += 1;
+                     
                     break;
             }
 
