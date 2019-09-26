@@ -25,15 +25,16 @@ const main = () => {
             // console.log("STEP:",time, "GAME IN PROGRESS")
             // console.log("DIRECTION:", player.direction);
             // console.log("POS timer: ", player.timer);
-
+            window.requestAnimationFrame(main);
         } else {
             container.style.display = 'flex';
             score.style.display = 'none';
-            block.innerHTML = 'YOU DEAD';
+            text.innerHTML = 'YOU DEAD';
             block.classList.add('finished');
+            
         }
 
     }
-    window.requestAnimationFrame(main);
+    
     frames++;
 }

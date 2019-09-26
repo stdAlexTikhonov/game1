@@ -26,7 +26,8 @@
 }
 
 .finished {
-    animation-duration: 5s;
+    animation-duration: 2s;
     animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
     animation-name: fadein;
 }
