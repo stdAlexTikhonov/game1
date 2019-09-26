@@ -15,6 +15,7 @@ document.body.appendChild(container);
 
 //main menu
 const block = document.createElement('div');
+block.style.display = 'flex';
 block.style.fontFamily = 'Tahoma';
 block.style.fontWeight = 'Bold';
 block.style.margin = 'auto';
@@ -23,8 +24,7 @@ block.style.width = WINDOW_WIDTH + 'px';
 block.style.height = WINDOW_HEIGHT + 'px';
 block.style.background = 'black';
 block.style.textAlign = 'center';
-block.style.paddingTop = '300px';
-block.innerHTML = ">>> PRESS TO START <<<";
+
 block.className = 'start';
 container.appendChild(block);
 block.onpointerdown = e => {
@@ -36,6 +36,11 @@ block.onpointerup = e => {
     container.style.display = 'none';
     block.onpointerup = null;
 }
+
+const text = document.createElement('div');
+text.style.margin = 'auto';
+text.innerHTML = ">>> PRESS TO START <<<";
+block.appendChild(text);
 
 
 //canvas

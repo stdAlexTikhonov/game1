@@ -29,7 +29,7 @@ const main = () => {
         } else {
             container.style.display = 'flex';
             score.style.display = 'none';
-            block.innerHTML = 'YOU DEAD';
+            text.innerHTML = 'YOU DEAD';
             block.classList.add('finished');
         }
 
