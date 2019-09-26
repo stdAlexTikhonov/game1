@@ -27,7 +27,10 @@ const main = () => {
             // console.log("POS timer: ", player.timer);
 
         } else {
-            console.log("GAME PAUSED")
+            container.style.display = 'flex';
+            score.style.display = 'none';
+            block.innerHTML = 'YOU DEAD';
+            block.classList.add('finished');
         }
 
     }

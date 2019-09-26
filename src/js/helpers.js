@@ -95,8 +95,9 @@ const findPath = () => {
 
 const drawHunter = () => {
     
-    const { hunter: hunter1 } = store.getState();
+    const { hunter: hunter1, player } = store.getState();
     if (!hunter1.currentStep) {
+        if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
         const PATH = findPath();
         store.dispatch({type: SET_PATH, path: PATH});
         store.dispatch({type: SET_HUNTER_DIRECTION});
