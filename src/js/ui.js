@@ -9,23 +9,23 @@ container.style.position = 'absolute';
 container.style.display = 'flex';
 container.style.width = '100%';
 container.style.height = '100%';
+container.id = 'container';
 document.body.appendChild(container);
 
 
 //main menu
 const block = document.createElement('div');
-block.style.color = 'white';
 block.style.fontFamily = 'Tahoma';
 block.style.fontWeight = 'Bold';
 block.style.margin = 'auto';
 block.style.boxSizing = 'border-box';
 block.style.width = WINDOW_WIDTH + 'px';
 block.style.height = WINDOW_HEIGHT + 'px';
-block.style.background = 'rgba(0,0,0,0.5)';
+block.style.background = 'black';
 block.style.textAlign = 'center';
 block.style.paddingTop = '300px';
-block.style.fontSize = '32pt';
 block.innerHTML = ">>> PRESS TO START <<<";
+block.className = 'start';
 container.appendChild(block);
 block.onpointerdown = e => {
     block.style.fontSize = '22pt';
@@ -34,6 +34,7 @@ block.onpointerdown = e => {
 block.onpointerup = e => {
     init();
     container.style.display = 'none';
+    block.onpointerup = null;
 }
 
 

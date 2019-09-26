@@ -29,7 +29,8 @@ const main = () => {
         } else {
             container.style.display = 'flex';
             score.style.display = 'none';
-            console.log("GAME PAUSED")
+            block.innerHTML = 'YOU DEAD';
+            block.classList.add('finished');
         }
 
     }

@@ -1,0 +1,32 @@
+/* #container {
+    animation-duration: 3s;
+    animation-name: fadein;
+} */
+
+@keyframes fadein {
+    from {
+        color: white;
+        opacity: 0;
+        font-size: 32pt;
+        display: block;
+    }
+
+    to {
+        color: red;
+        opacity: 1;
+        font-size: 125pt;
+        display: none;
+    }
+}
+
+.start {
+    font-size: 32pt;
+    color: white;
+    display: block;
+}
+
+.finished {
+    animation-duration: 5s;
+    animation-fill-mode: forwards;
+    animation-name: fadein;
+}
