@@ -17,8 +17,9 @@ const nextMove = (axis, direction_on_axis, X, Y, direction) => {
     const isY = axis === 'y';
     const y = player.y + direction_on_axis;
     const x = player.x + direction_on_axis;
+    const isWall = MAP_[isY ? y : player.y][isX ? x : player.x] === 0
 
-    if (MAP_[isY ? y : player.y][isX ? x : player.x] === 0) {
+    if (isWall) {
         if (player.previousDirection === direction) store.dispatch({type: RESET_DIRECTION});
         if (MAP_[isY ? y : player.y+1][isX ? x : player.x+1] === 1) {
             return {
@@ -33,8 +34,8 @@ const nextMove = (axis, direction_on_axis, X, Y, direction) => {
         }
     }
     return {
-        Y: isY ? Y + game.timer * direction_on_axis : Y,
-        X: isX ? X + game.timer * direction_on_axis : X
+        Y: !isWall && isY ? Y + game.timer * direction_on_axis : Y,
+        X: !isWall && isX ? X + game.timer * direction_on_axis : X
         }
 }
 
