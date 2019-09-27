@@ -11,62 +11,50 @@ const clearWindow = () => {
     context.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 }
 
-const nextMove = (axis, direction_on_axis, X, Y, direction) => {
+const nextPlayerMove = () => {
+    /*************** IF YOU WANT UNDERSTAND IT - GOOD LUCK **********************/
     const {game, player} = store.getState();
-    const isX = axis === 'x';
-    const isY = axis === 'y';
-    const y = player.y + direction_on_axis;
-    const x = player.x + direction_on_axis;
-    const isWall = MAP_[isY ? y : player.y][isX ? x : player.x] === 0
-
-    if (isWall) {
-        if (player.previousDirection === direction) store.dispatch({type: RESET_DIRECTION});
-        if (MAP_[isY ? y : player.y+1][isX ? x : player.x+1] === 1) {
-            return {
-                Y: isY ? Y : Y + game.timer,
-                X: isX ? X : X + game.timer
-             }
-        } else if (MAP_[isY ? y : player.y-1][isX ? x : player.x-1] === 1) {
-            return {
-                Y: isY ? Y : Y - game.timer,
-                X: isX ? X : X - game.timer
+    const { direction } = player;
+    let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
+    let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
+    if (player.direction) {
+        const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
+        const isX = axis === 'x';
+        const isY = axis === 'y';
+        const y = player.y + direction_on_axis;
+        const x = player.x + direction_on_axis;
+        const isWall = MAP_[isY ? y : player.y][isX ? x : player.x] === 0
+    
+        if (isWall) {
+            if (player.previousDirection === direction) store.dispatch({type: RESET_DIRECTION});
+            if (MAP_[isY ? y : player.y+1][isX ? x : player.x+1] === 1) {
+                return {
+                    Y: isY ? Y : Y + game.timer,
+                    X: isX ? X : X + game.timer
+                 }
+            } else if (MAP_[isY ? y : player.y-1][isX ? x : player.x-1] === 1) {
+                return {
+                    Y: isY ? Y : Y - game.timer,
+                    X: isX ? X : X - game.timer
+                }
             }
         }
-    }
+    
+
     return {
-        Y: !isWall && isY ? Y + game.timer * direction_on_axis : Y,
-        X: !isWall && isX ? X + game.timer * direction_on_axis : X
+            Y: direction && !isWall && isY ? Y + game.timer * direction_on_axis : Y,
+            X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
         }
+    } else return {Y,X}
 }
 
 const drawPlayer = () => {
-    const { player, game } = store.getState();
-    let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
-    let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
-    let move = null;
-    switch(player.direction) {
-        case UP:
-            move = nextMove('y', -1, X, Y, UP)
-            break;
-        case DOWN:
-            move = nextMove('y', 1, X, Y, DOWN)
-            break;
-        case LEFT:
-            move = nextMove('x', -1, X, Y, LEFT)
-            break;
-        case RIGHT:
-            move = nextMove('x', 1, X, Y, RIGHT)
-            break;
-    }
-    const { X: X1, Y: Y1 } = move ? move : { X, Y};
+    const { X, Y } = nextPlayerMove();
     context.beginPath();
-    context.arc(X1, Y1, CELL_WIDTH/2, 0, 2 * Math.PI, false);
+    context.arc(X, Y, CELL_WIDTH/2, 0, 2 * Math.PI, false);
     context.fillStyle = PLAYER_COLOR;
     context.fill();
     context.closePath();
-    // ctx.lineWidth = 5;
-    // ctx.strokeStyle = '#003300';
-    // ctx.stroke();
 }
 
 const findPath = () => {

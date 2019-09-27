@@ -36,6 +36,12 @@ const RIGHT = 'RIGHT';
 const UP = 'UP';
 const DOWN = 'DOWN';
 
+const DIRECTION_MAPPING = {
+    UP: { axis: 'y', direction_on_axis: -1 },
+    DOWN: { axis: 'y', direction_on_axis: 1 },
+    LEFT: { axis: 'x', direction_on_axis: -1 },
+    RIGHT: { axis: 'x', direction_on_axis: 1 }
+}
 
 //player
 const STEP = 5;
