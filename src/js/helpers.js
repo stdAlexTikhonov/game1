@@ -11,15 +11,15 @@ const clearWindow = () => {
     context.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 }
 
-const nextMove = (axis, direction, X, Y) => {
+const nextMove = (axis, direction_on_axis, X, Y, direction) => {
     const {game, player} = store.getState();
     const isX = axis === 'x';
     const isY = axis === 'y';
-    const y = player.y + direction;
-    const x = player.x + direction;
+    const y = player.y + direction_on_axis;
+    const x = player.x + direction_on_axis;
 
     if (MAP_[isY ? y : player.y][isX ? x : player.x] === 0) {
-        if (player.previousDirection === UP) store.dispatch({type: RESET_DIRECTION});
+        if (player.previousDirection === direction) store.dispatch({type: RESET_DIRECTION});
         if (MAP_[isY ? y : player.y+1][isX ? x : player.x+1] === 1) {
             return {
                 Y: isY ? Y : Y + game.timer,
@@ -33,8 +33,8 @@ const nextMove = (axis, direction, X, Y) => {
         }
     }
     return {
-        Y: isY ? Y + game.timer * direction : Y,
-        X: isX ? X + game.timer * direction : X
+        Y: isY ? Y + game.timer * direction_on_axis : Y,
+        X: isX ? X + game.timer * direction_on_axis : X
         }
 }
 
@@ -45,52 +45,16 @@ const drawPlayer = () => {
     let move = null;
     switch(player.direction) {
         case UP:
-            // if (MAP_[player.y-1][player.x] === 0) {
-            //     if (player.previousDirection === UP) store.dispatch({type: RESET_DIRECTION});
-            //     if (MAP_[player.y-1][player.x+1] === 1) {
-            //         X += game.timer;
-            //     } else if (MAP_[player.y-1][player.x-1] === 1) {
-            //         X -= game.timer;
-            //     }
-            // }
-            // else Y -= game.timer;
-            move = nextMove('y', -1, X, Y)
+            move = nextMove('y', -1, X, Y, UP)
             break;
         case DOWN:
-            // if (MAP_[player.y+1][player.x] === 0) {
-            //     if (player.previousDirection === DOWN) store.dispatch({type: RESET_DIRECTION});
-            //     else if (MAP_[player.y+1][player.x+1] === 1) {
-            //         X += game.timer;
-            //     } else if (MAP_[player.y+1][player.x-1] === 1) {
-            //         X -= game.timer;
-            //     }
-            // }
-            // else Y += game.timer;
-            move = nextMove('y', 1, X, Y)
+            move = nextMove('y', 1, X, Y, DOWN)
             break;
         case LEFT:
-            // if (MAP_[player.y][player.x-1] === 0) {
-            //     if (player.previousDirection === LEFT) store.dispatch({type: RESET_DIRECTION});
-            //     else if (MAP_[player.y+1][player.x-1] === 1) {
-            //         Y += game.timer;
-            //     } else if (MAP_[player.y-1][player.x-1] === 1) {
-            //         Y -= game.timer;
-            //     }
-            // }
-            // else X -= game.timer;
-            move = nextMove('x', -1, X, Y)
+            move = nextMove('x', -1, X, Y, LEFT)
             break;
         case RIGHT:
-            // if (MAP_[player.y][player.x+1] === 0) {
-            //     if (player.previousDirection === RIGHT) store.dispatch({type: RESET_DIRECTION});
-            //     else if (MAP_[player.y+1][player.x+1] === 1) {
-            //         Y += game.timer;
-            //     } else if (MAP_[player.y-1][player.x+1] === 1) {
-            //         Y -= game.timer;
-            //     }
-            // }
-            // else X += game.timer;
-            move = nextMove('x', 1, X, Y)
+            move = nextMove('x', 1, X, Y, RIGHT)
             break;
     }
     const { X: X1, Y: Y1 } = move ? move : { X, Y};
