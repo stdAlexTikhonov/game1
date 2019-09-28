@@ -5,16 +5,17 @@ document.body.style.padding = 0;
 
 //container
 const container = document.createElement('div');
-container.style.position = 'absolute';
+container.style.margin = 'auto';
 container.style.display = 'flex';
-container.style.width = '100%';
-container.style.height = '100%';
+container.style.width = WINDOW_WIDTH;
+container.style.height = WINDOW_HEIGHT;
 container.id = 'container';
 document.body.appendChild(container);
 
 
 //main menu
 const block = document.createElement('div');
+block.style.position = 'absolute';
 block.style.display = 'flex';
 block.style.fontFamily = 'Tahoma';
 block.style.fontWeight = 'Bold';
@@ -33,8 +34,8 @@ block.onpointerdown = e => {
 
 block.onpointerup = e => {
     init();
-    container.style.display = 'none';
     block.onpointerup = null;
+    container.removeChild(block);
 }
 
 const text = document.createElement('div');
@@ -48,7 +49,7 @@ const canvas = document.createElement('canvas');
 canvas.style.margin = 'auto';
 canvas.width = WINDOW_WIDTH;
 canvas.height = WINDOW_HEIGHT;
-document.body.appendChild(canvas);
+container.appendChild(canvas);
 
 //score block
 const score = document.createElement('div');

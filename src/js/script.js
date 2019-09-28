@@ -28,7 +28,7 @@ const main = () => {
             // console.log("POS timer: ", player.timer);
             window.requestAnimationFrame(main);
         } else {
-            container.style.display = 'flex';
+            container.appendChild(block);
             score.style.display = 'none';
             text.innerHTML = 'YOU DEAD';
             block.classList.add('finished');
