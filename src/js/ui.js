@@ -5,7 +5,7 @@ document.body.style.padding = 0;
 
 //container
 const container = document.createElement('div');
-container.style.margin = 'auto';
+container.style.margin = '0 auto';
 container.style.display = 'flex';
 container.style.width = WINDOW_WIDTH;
 container.style.height = WINDOW_HEIGHT;
@@ -65,14 +65,15 @@ let pointerX, pointerY;
 canvas.onpointerdown = e => {
     pointerX = e.offsetX;
     pointerY = e.offsetY;
+    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) store.dispatch({type: PAUSE});
 };
 
 canvas.onpointermove = e => {
     const diffLeft = e.offsetX - pointerX;
     const diffUp = e.offsetY - pointerY;
     const vertical = Math.abs(diffLeft) < Math.abs(diffUp);
-    
-    if (vertical) {
+    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) return
+    else if (vertical) {
         if (e.offsetY > pointerY) store.dispatch({type: SWIPEDOWN});
         else store.dispatch({type: SWIPEUP});
     } else {
