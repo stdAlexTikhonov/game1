@@ -1,4 +1,4 @@
-const hunterReducer = (state = { x: 7, y: 7, path: [], currentStep: null}, action) => {
+const hunterReducer = (state = { x: 7, y: 7, path: [], history: [], currentStep: null}, action) => {
     switch(action.type) {
         case SET_PATH:
             return {
@@ -31,6 +31,14 @@ const hunterReducer = (state = { x: 7, y: 7, path: [], currentStep: null}, actio
                 ...state,
                 x,
                 y
+            }
+        }
+        case SAVE: {
+            let { history } = state;
+            history = history.length > 10 ?  history.slice(1,10) : history;
+            return {
+                ...state,
+                history: history.concat([{x: state.x, y: state.y}])
             }
         }
         default:

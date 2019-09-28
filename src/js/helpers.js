@@ -11,6 +11,7 @@ const clearWindow = () => {
     context.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 }
 
+
 const nextPlayerMove = () => {
     /*************** IF YOU WANT UNDERSTAND IT - GOOD LUCK **********************/
     const {game, player} = store.getState();
@@ -79,7 +80,6 @@ const findPath = () => {
 }
 
 const drawHunter = () => {
-    
     const { hunter: hunter1, player } = store.getState();
     if (!hunter1.currentStep) {
         if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
@@ -139,27 +139,4 @@ const drawMap = () => {
         }
       });
     });
-}
-
-
-//user actions
-let pointerX, pointerY;
-const onCanvasDownHandler = e => {
-    pointerX = e.offsetX;
-    pointerY = e.offsetY;
-}
-
-const onCanvasMoveHandler = e => {
-    const diffLeft = e.offsetX - pointerX;
-    const diffUp = e.offsetY - pointerY;
-    const vertical = Math.abs(diffLeft) < Math.abs(diffUp);
-    
-    if (vertical) {
-        if (e.offsetY > pointerY) store.dispatch({type: SWIPEDOWN});
-        else store.dispatch({type: SWIPEUP});
-    } else {
-        if (e.offsetX > pointerX) store.dispatch({type: SWIPERIGHT});
-        else store.dispatch({type: SWIPELEFT});
-    }
-    
 }

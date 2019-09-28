@@ -60,6 +60,24 @@ document.body.appendChild(score);
 
 const context = canvas.getContext('2d');
 
-canvas.onpointerdown = onCanvasDownHandler;
+let pointerX, pointerY;
+canvas.onpointerdown = e => {
+    pointerX = e.offsetX;
+    pointerY = e.offsetY;
+};
 
-canvas.onpointermove = onCanvasMoveHandler;
+canvas.onpointermove = e => {
+    const diffLeft = e.offsetX - pointerX;
+    const diffUp = e.offsetY - pointerY;
+    const vertical = Math.abs(diffLeft) < Math.abs(diffUp);
+    
+    if (vertical) {
+        if (e.offsetY > pointerY) store.dispatch({type: SWIPEDOWN});
+        else store.dispatch({type: SWIPEUP});
+    } else {
+        if (e.offsetX > pointerX) store.dispatch({type: SWIPERIGHT});
+        else store.dispatch({type: SWIPELEFT});
+    }
+    
+};
+

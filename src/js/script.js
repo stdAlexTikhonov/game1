@@ -5,11 +5,12 @@ const main = () => {
         store.dispatch({type: SET_TIMER});
         
         const { game } = store.getState();
-        const { history, process } = game;
+        const { process } = game;
 
         if (process) {
             
             if (game.timer === 0) {
+                store.dispatch({type: SAVE});
                 store.dispatch({type: SET_HUNTER_POSITION});
                 store.dispatch({type: SET_HUNTER_DIRECTION});
                 store.dispatch({type: SET_DIRECTION}); 

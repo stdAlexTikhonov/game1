@@ -5,7 +5,8 @@ const initPlayer = {
     lastUserDirection: null,
     previousDirection: null,
     points: 0,
-    foodMap: ['11']
+    foodMap: ['11'],
+    history: []
 };
 
 const  playerReducer = (state = initPlayer, action) => {
@@ -90,6 +91,14 @@ const  playerReducer = (state = initPlayer, action) => {
                 direction: null,
                 lastUserDirection: null
             }
+        case SAVE: {
+            let { history } = state;
+            history = history.length > 10 ?  history.slice(1,10) : history;
+            return {
+                ...state,
+                history: history.concat([{x: state.x, y: state.y}])
+            }
+        }
         default:
             return state;
     }
