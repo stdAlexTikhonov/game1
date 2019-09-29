@@ -14,20 +14,29 @@ const main = () => {
                     store.dispatch({type: SET_HUNTER_POSITION});
                     store.dispatch({type: SET_HUNTER_DIRECTION});
                     store.dispatch({type: SET_DIRECTION}); 
+                } else {
+                   
                 }
-                
-                //drawing==========================
+
                 clearWindow();
                 drawMap();
                 drawPlayer();
                 drawHunter();
                 showPoints();
-                //logging==========================
-                // console.log("STEP:",time, "GAME IN PROGRESS")
-                // console.log("DIRECTION:", player.direction);
-                // console.log("POS timer: ", player.timer);
-                
-            } else console.log("GAME PAUSED")
+ 
+            } 
+
+
+
+            if (pause) {
+                store.dispatch({type: SET_TIME_POSITION});
+                clearWindow();
+                drawMap();
+                drawPlayer();
+                drawHunter();
+                showPoints();
+                drawLine();
+            }
             window.requestAnimationFrame(main);
         } else {
             container.appendChild(block);

@@ -45,3 +45,5 @@ const DIRECTION_MAPPING = {
 
 //player
 const STEP = 5;
+
+const TIME_STEP = 5;

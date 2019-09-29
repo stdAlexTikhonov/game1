@@ -20,7 +20,7 @@ const gameReducer = (state = { pause: false, process: false, timer: 0}, action) 
         case PAUSE: 
             return {
                 ...state,
-                pause: !state.pause
+                pause: true
             }
         default:
             return state;

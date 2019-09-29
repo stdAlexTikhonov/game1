@@ -72,8 +72,10 @@ canvas.onpointermove = e => {
     const diffLeft = e.offsetX - pointerX;
     const diffUp = e.offsetY - pointerY;
     const vertical = Math.abs(diffLeft) < Math.abs(diffUp);
-    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) return
-    else if (vertical) {
+    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) {
+        if (e.offsetX > pointerX) store.dispatch({type: SWIPE_TIME_RIGHT});
+        else store.dispatch({type: SWIPE_TIME_LEFT});
+    }  else if (vertical) {
         if (e.offsetY > pointerY) store.dispatch({type: SWIPEDOWN});
         else store.dispatch({type: SWIPEUP});
     } else {
