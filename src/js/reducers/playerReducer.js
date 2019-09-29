@@ -92,11 +92,11 @@ const  playerReducer = (state = initPlayer, action) => {
                 lastUserDirection: null
             }
         case SAVE: {
-            let { history } = state;
-            history = history.length > 10 ?  history.slice(1,10) : history;
+            const { history } = state;
+            history.unshift(state.currentStep);
             return {
                 ...state,
-                history: history.concat([{x: state.x, y: state.y}])
+                history: history.slice(0,11)
             }
         }
         default:
