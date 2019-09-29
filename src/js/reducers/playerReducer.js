@@ -31,6 +31,12 @@ const  playerReducer = (state = initPlayer, action) => {
                 ...state,
                 lastUserDirection: DOWN
             }
+        case SET_POSITION_FROM_HISTORY:
+                return {
+                    ...state,
+                    x: state.history[action.index].x,
+                    y: state.history[action.index].y
+                }
         case SET_DIRECTION: {
             let {x, y, lastUserDirection} = state;
             switch(state.direction) {
@@ -93,7 +99,7 @@ const  playerReducer = (state = initPlayer, action) => {
             }
         case SAVE: {
             const { history } = state;
-            history.unshift(state.currentStep);
+            history.unshift({ x: state.x, y: state.y});
             return {
                 ...state,
                 history: history.slice(0,11)

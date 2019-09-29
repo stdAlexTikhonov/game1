@@ -4,7 +4,7 @@ const main = () => {
     if (frames % FPS === 0) {
         store.dispatch({type: SET_TIMER});
         
-        const { game } = store.getState();
+        const { game, timeline } = store.getState();
         const { process, pause } = game;
 
         if (process) {
@@ -14,9 +14,7 @@ const main = () => {
                     store.dispatch({type: SET_HUNTER_POSITION});
                     store.dispatch({type: SET_HUNTER_DIRECTION});
                     store.dispatch({type: SET_DIRECTION}); 
-                } else {
-                   
-                }
+                } 
 
                 clearWindow();
                 drawMap();
@@ -30,11 +28,15 @@ const main = () => {
 
             if (pause) {
                 store.dispatch({type: SET_TIME_POSITION});
-                clearWindow();
-                drawMap();
-                drawPlayer();
-                drawHunter();
-                showPoints();
+                if (game.timer === 0) {
+                    store.dispatch({type: SET_POSITION_FROM_HISTORY, index: timeline.index});
+                    clearWindow();
+                    drawMap();
+                    drawPlayer();
+                    drawHunter();
+                    showPoints();
+                    
+                }
                 drawLine();
             }
             window.requestAnimationFrame(main);

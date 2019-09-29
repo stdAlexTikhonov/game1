@@ -10,6 +10,12 @@ const hunterReducer = (state = { x: 7, y: 7, path: [], history: [], currentStep:
                 ...state,
                 currentStep: state.path.shift() 
             }
+        case SET_POSITION_FROM_HISTORY:
+            return {
+                ...state,
+                x: state.history[action.index].x,
+                y: state.history[action.index].y
+            }
         case SET_HUNTER_POSITION: {
             let {x, y} = state;
 
@@ -35,7 +41,7 @@ const hunterReducer = (state = { x: 7, y: 7, path: [], history: [], currentStep:
         }
         case SAVE: {
             const { history } = state;
-            history.unshift(state.currentStep);
+            history.unshift({x: state.x, y: state.y});
             return {
                 ...state,
                 history: history.slice(0,11)

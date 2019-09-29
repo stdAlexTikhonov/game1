@@ -60,7 +60,6 @@ const drawPlayer = () => {
 
 const drawLine = () => {
     const { timeline } = store.getState();
-    console.log(timeline)
     context.beginPath();
     context.moveTo(timeline.x, WINDOW_HEIGHT - CELL_WIDTH);
     context.lineTo(timeline.x, WINDOW_HEIGHT)
