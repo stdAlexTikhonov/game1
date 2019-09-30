@@ -23,7 +23,9 @@ const main = () => {
                 showPoints();
  
             } else {
-                if (!timeline.timemashine) store.dispatch({type: REVERSE_HISTORY});
+                if (!timeline.timemashine) {
+                    store.dispatch({type: REVERSE_HISTORY});
+                }
                 store.dispatch({type: SET_TIME_POSITION});
                 if (game.timer === 0) {
                     store.dispatch({type: SET_POSITION_FROM_HISTORY, index: timeline.index});

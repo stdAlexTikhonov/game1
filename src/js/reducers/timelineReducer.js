@@ -35,9 +35,6 @@ const  timelineReducer = (state = initTimeline, action) => {
             }
         }
         default:
-            return {
-                ...state,
-                timemashine: false
-            };
+            return state;
     }
 }
