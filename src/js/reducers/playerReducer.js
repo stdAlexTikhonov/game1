@@ -91,6 +91,11 @@ const  playerReducer = (state = initPlayer, action) => {
 
             }
         }
+        case REVERSE_HISTORY:
+                return {
+                    ...state,
+                    history: state.history.reverse()
+                }
         case RESET_DIRECTION:
             return {
                 ...state,
@@ -102,7 +107,7 @@ const  playerReducer = (state = initPlayer, action) => {
             history.unshift({ x: state.x, y: state.y});
             return {
                 ...state,
-                history: history.slice(0,11)
+                history: history.slice(0,HISTORY_LENGTH)
             }
         }
         default:

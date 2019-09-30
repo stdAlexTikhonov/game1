@@ -9,6 +9,7 @@ const HUNTER_COLOR = 'blue';
 const PLAYER_COLOR = 'yellow';
 const FOOD_COLOR = 'yellow';
 const FOOD_SIZE = CELL_WIDTH / 8;
+const HISTORY_LENGTH = 11;
 
 const MAP_ = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],

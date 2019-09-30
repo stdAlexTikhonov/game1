@@ -1,7 +1,8 @@
 const initTimeline = { 
     x: WINDOW_WIDTH - TIME_STEP, 
     direction: null,
-    index: 10
+    index: 10,
+    timemashine: false
 };
 
 const  timelineReducer = (state = initTimeline, action) => {
@@ -29,10 +30,14 @@ const  timelineReducer = (state = initTimeline, action) => {
             return {
                 ...state,
                 x,
-                index: Math.floor(x/WINDOW_WIDTH*10)
+                index: Math.floor(x/WINDOW_WIDTH*10),
+                timemashine: true
             }
         }
         default:
-            return state;
+            return {
+                ...state,
+                timemashine: false
+            };
     }
 }
