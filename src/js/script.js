@@ -15,13 +15,13 @@ const main = () => {
                     store.dispatch({type: SET_DIRECTION}); 
                 } 
 
-                clearWindow();
-                drawMap();
-                drawPlayer();
-                drawHunter();
-                showPoints();
- 
             } 
+
+            clearWindow();
+            drawMap();
+            drawPlayer();
+            drawHunter();
+            showPoints();
             // else {
             //     if (!timeline.timemashine) {
             //         store.dispatch({type: REVERSE_HISTORY});

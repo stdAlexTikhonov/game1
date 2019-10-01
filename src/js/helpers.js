@@ -18,7 +18,7 @@ const nextPlayerMove = () => {
     const { direction } = player;
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
-    if (player.direction) {
+    if (player.direction && !game.pause) {
         const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
         const isX = axis === 'x';
         const isY = axis === 'y';
@@ -46,7 +46,23 @@ const nextPlayerMove = () => {
             Y: direction && !isWall && isY ? Y + game.timer * direction_on_axis : Y,
             X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
         }
-    } else return {Y,X}
+    } else {
+        switch(direction) {
+            case UP:
+                Y -= game.savedTimerPosition;
+                break;
+            case DOWN:
+                Y += game.savedTimerPosition;
+                break;
+            case LEFT:
+                X -= game.savedTimerPosition;
+                break;
+            case RIGHT:
+                X += game.savedTimerPosition;
+                break;
+        }
+        return {Y,X}
+    }
 }
 
 const drawPlayer = () => {
@@ -92,6 +108,7 @@ const findPath = () => {
 
 const drawHunter = () => {
     const { hunter: hunter1, player } = store.getState();
+    
     if (!hunter1.currentStep) {
         if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
         const PATH = findPath();
@@ -100,30 +117,50 @@ const drawHunter = () => {
     }
 
     const { hunter, game } = store.getState();
-  
+    
+
     let X = hunter.x * CELL_WIDTH;
     let Y = hunter.y * CELL_WIDTH;
 
-    switch(hunter.currentStep) {
-        case UP:
-            Y -= game.timer;
-            break;
-        case DOWN:
-            Y += game.timer;
-            break;
-        case LEFT:
-            X -= game.timer;
-            break;
-        case RIGHT:
-            X += game.timer;
-            break;
+    if (!game.pause) {
+        switch(hunter.currentStep) {
+            case UP:
+                Y -= game.timer;
+                break;
+            case DOWN:
+                Y += game.timer;
+                break;
+            case LEFT:
+                X -= game.timer;
+                break;
+            case RIGHT:
+                X += game.timer;
+                break;
+        }
+    } else {
+        switch(hunter.currentStep) {
+            case UP:
+                Y -= game.savedTimerPosition;
+                break;
+            case DOWN:
+                Y += game.savedTimerPosition;
+                break;
+            case LEFT:
+                X -= game.savedTimerPosition;
+                break;
+            case RIGHT:
+                X += game.savedTimerPosition;
+                break;
+        } 
     }
+
 
     context.beginPath();
     context.fillStyle = HUNTER_COLOR;
     context.rect(X, Y, CELL_WIDTH, CELL_WIDTH);
     context.fill();
     context.closePath();
+
 }
 
 const showPoints = () => {
