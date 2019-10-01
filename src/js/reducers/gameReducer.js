@@ -12,15 +12,10 @@ const gameReducer = (state = { pause: false, process: false, timer: 0}, action) 
                 ...state,
                 timer: (state.timer + STEP) % CELL_WIDTH
             }
-        case RESET:
-            return {
-                process: false,
-                pause: false
-            }
         case PAUSE: 
             return {
                 ...state,
-                pause: true
+                pause: !state.pause
             }
         default:
             return state;
