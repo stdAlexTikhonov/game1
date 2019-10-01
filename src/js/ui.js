@@ -63,9 +63,12 @@ const context = canvas.getContext('2d');
 
 let pointerX, pointerY;
 canvas.onpointerdown = e => {
+    const { game } = store.getState();
     pointerX = e.offsetX;
     pointerY = e.offsetY;
-    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) store.dispatch({type: PAUSE});
+    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH && game.pause) return;
+    else if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) store.dispatch({type: PAUSE});
+    else store.dispatch({type: START});
 };
 
 canvas.onpointermove = e => {
@@ -76,7 +79,8 @@ canvas.onpointermove = e => {
     //     if (e.offsetX > pointerX) store.dispatch({type: SWIPE_TIME_RIGHT});
     //     else store.dispatch({type: SWIPE_TIME_LEFT});
     // }  else 
-    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) return;
+    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) return; 
+
     if (vertical) {
         if (e.offsetY > pointerY) store.dispatch({type: SWIPEDOWN});
         else store.dispatch({type: SWIPEUP});

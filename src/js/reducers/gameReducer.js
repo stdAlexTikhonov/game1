@@ -1,7 +1,19 @@
-const gameReducer = (state = { pause: false, process: false, timer: 0, savedTimerPosition: null}, action) => {
+const initGame = {
+    pause: false,
+    process: false,
+    timer: 0,
+    savedTimerPosition: null
+};
+
+const gameReducer = (state = initGame, action) => {
     switch (action.type) {
-        case START: 
-            return Object.assign(state, { 'process': true, pause: false});
+        case START:
+            return {
+                ...state,
+                process: true,
+                pause: false,
+                savedTimerPosition: null
+            }
         case STOP:
             return {
                 ...state,
@@ -15,7 +27,7 @@ const gameReducer = (state = { pause: false, process: false, timer: 0, savedTime
         case PAUSE: 
             return {
                 ...state,
-                pause: !state.pause,
+                pause: true,
                 savedTimerPosition: state.timer
             }
         default:
