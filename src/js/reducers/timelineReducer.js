@@ -17,7 +17,7 @@ const  timelineReducer = (state = initTimeline, action) => {
                 ...state,
                 direction: RIGHT
             }
-        case PAUSE:
+        case PAUSE_TIME:
             return {
                 ...state,
                 direction: null

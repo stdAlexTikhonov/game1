@@ -77,8 +77,20 @@ const drawPlayer = () => {
 const drawTimeScale = () => {
     const { timeline, game } = store.getState();
     context.beginPath();
-    context.moveTo(timeline.x + game.timer, WINDOW_HEIGHT - CELL_WIDTH);
-    context.lineTo(timeline.x + game.timer, WINDOW_HEIGHT)
+    switch(timeline.direction) {
+        case LEFT:
+            context.moveTo(100, WINDOW_HEIGHT - CELL_WIDTH);
+            context.lineTo(100, WINDOW_HEIGHT)
+            break;
+        case RIGHT:
+            context.moveTo(800 , WINDOW_HEIGHT - CELL_WIDTH);
+            context.lineTo(800, WINDOW_HEIGHT)
+            break;
+        default:
+            context.moveTo(450, WINDOW_HEIGHT - CELL_WIDTH);
+            context.lineTo(450, WINDOW_HEIGHT)
+            break;
+    }
     context.lineWidth = 2;
     context.strokeStyle = 'red';
     context.stroke()
