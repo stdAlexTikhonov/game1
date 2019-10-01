@@ -74,11 +74,11 @@ const drawPlayer = () => {
     context.closePath();
 }
 
-const drawLine = () => {
-    const { timeline } = store.getState();
+const drawTimeScale = () => {
+    const { timeline, game } = store.getState();
     context.beginPath();
-    context.moveTo(timeline.x, WINDOW_HEIGHT - CELL_WIDTH);
-    context.lineTo(timeline.x, WINDOW_HEIGHT)
+    context.moveTo(timeline.x + game.timer, WINDOW_HEIGHT - CELL_WIDTH);
+    context.lineTo(timeline.x + game.timer, WINDOW_HEIGHT)
     context.lineWidth = 2;
     context.strokeStyle = 'red';
     context.stroke()

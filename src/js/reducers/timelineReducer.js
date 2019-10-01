@@ -17,23 +17,11 @@ const  timelineReducer = (state = initTimeline, action) => {
                 ...state,
                 direction: RIGHT
             }
-        case SET_TIME_POSITION: {
-            let {x, direction} = state;
-            switch(direction) {
-                case LEFT:
-                    x -= x > 0 ? TIME_STEP : 0;
-                    break;
-                case RIGHT:
-                    x += x < WINDOW_WIDTH ? TIME_STEP : 0;
-                    break;  
-            }
+        case PAUSE:
             return {
                 ...state,
-                x,
-                index: Math.floor(x/WINDOW_WIDTH*10),
-                timemashine: true
+                direction: null
             }
-        }
         default:
             return state;
     }
