@@ -26,11 +26,13 @@ const  playerReducer = (state = initPlayer, action) => {
                 ...state,
                 lastUserDirection: UP
             }
-        case SWIPEDOWN:
+        case SWIPEDOWN: {
             return {
                 ...state,
                 lastUserDirection: DOWN
             }
+        }
+
         case SET_POSITION_FROM_HISTORY:
                 return {
                     ...state,
@@ -39,55 +41,15 @@ const  playerReducer = (state = initPlayer, action) => {
                 }
         case SET_DIRECTION: {
             let {x, y, lastUserDirection} = state;
-            switch(state.direction) {
-                case LEFT:
-                    if (MAP_[state.y][state.x-1] === 0) {
-                        if (MAP_[state.y+1][state.x-1] === 1) {
-                            y += 1;
-                        } else if (MAP_[state.y-1][state.x-1] === 1) {
-                            y -= 1;
-                        } 
-                    } else x -= 1
-                    break;
-                case RIGHT:
-                    if (MAP_[state.y][state.x+1] === 0) {
-                        if (MAP_[state.y+1][state.x+1] === 1) {
-                            y += 1;
-                        } else if (MAP_[state.y-1][state.x+1] === 1) {
-                            y -= 1;
-                        } 
-                    } else x += 1;
-                    break;
-                case UP:
-                    if (MAP_[state.y-1][state.x] === 0) {
-                        if (MAP_[state.y-1][state.x+1] === 1) {
-                            x += 1;
-                        } else if (MAP_[state.y-1][state.x-1] === 1) {
-                            x -= 1;
-                        }
-                    } else y -= 1;
-                    break;
-                case DOWN:
-                    if (MAP_[state.y+1][state.x] === 0) {
-                        if (MAP_[state.y+1][state.x+1] === 1) {
-                            x += 1;
-                        } else if (MAP_[state.y+1][state.x-1] === 1) {
-                            x -= 1;
-                        }
-                    } else y += 1;
-                     
-                    break;
-            }
-
-    
+            const { x: newx, y: newy} = state.direction ? setPlayerPosition(x,y,state.direction) : { x, y};
             return {
                 ...state,
                 previousDirection: state.direction,
                 direction: lastUserDirection,
-                points: state.direction && !state.foodMap.includes(`${y + '' + x}`) ? state.points + 1 : state.points,
-                foodMap: state.foodMap.includes(`${y + '' + x}`) ? state.foodMap : state.foodMap.concat([`${y + '' + x}`]),
-                x,
-                y,
+                points: state.direction && !state.foodMap.includes(`${newy + '' + newx}`) ? state.points + 1 : state.points,
+                foodMap: state.foodMap.includes(`${newy + '' + newx}`) ? state.foodMap : state.foodMap.concat([`${newy + '' + newx}`]),
+                x: newx,
+                y: newy,
 
             }
         }

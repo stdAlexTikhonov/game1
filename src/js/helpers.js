@@ -11,6 +11,32 @@ const clearWindow = () => {
     context.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 }
 
+const setPlayerPosition = (x,y,direction) => {
+    const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
+    const isX = axis === 'x';
+    const isY = axis === 'y';
+    const isWall = MAP_[isY ? y + direction_on_axis : y][isX ? x + direction_on_axis : x] === 0;
+
+    if (isWall && direction) {
+        if (MAP_[isY ? y+direction_on_axis : y+1][isX ? x+direction_on_axis : x+1] === 1) {
+            return { 
+                y: isY ? y : y + 1,
+                x: isX ? x : x + 1
+            }
+        } else if (MAP_[isY ? y+direction_on_axis : y-1][isX ? x+direction_on_axis : x-1] === 1) {
+            return { 
+                y: isY ? y : y - 1,
+                x: isX ? x : x - 1
+            }
+        } 
+    }
+
+    return {
+        x: !isWall && isX ? x + direction_on_axis : x,
+        y: !isWall && isY ? y + direction_on_axis : y
+    }
+
+}
 
 const nextPlayerMove = () => {
     /*************** IF YOU WANT UNDERSTAND IT - GOOD LUCK **********************/
