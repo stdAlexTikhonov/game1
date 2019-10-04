@@ -39,18 +39,23 @@ const  playerReducer = (state = initPlayer, action) => {
                     x: state.history[action.index].x,
                     y: state.history[action.index].y
                 }
-        case SET_DIRECTION: {
-            let {x, y, lastUserDirection} = state;
+        case SET_PLAYER_POSITION: {
+            let {x, y} = state;
             const { x: newx, y: newy} = state.direction ? setPlayerPosition(x,y,state.direction) : { x, y};
             return {
                 ...state,
-                previousDirection: state.direction,
-                direction: lastUserDirection,
                 points: state.direction && !state.foodMap.includes(`${newy + '' + newx}`) ? state.points + 1 : state.points,
                 foodMap: state.foodMap.includes(`${newy + '' + newx}`) ? state.foodMap : state.foodMap.concat([`${newy + '' + newx}`]),
                 x: newx,
                 y: newy,
-
+            }
+        }
+        case SET_PLAYER_DIRECTION: {
+            let {lastUserDirection} = state;
+            return {
+                ...state,
+                previousDirection: state.direction,
+                direction: lastUserDirection,
             }
         }
         case REVERSE_HISTORY:

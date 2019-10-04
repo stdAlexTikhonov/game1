@@ -17,7 +17,7 @@ const setPlayerPosition = (x,y,direction) => {
     const isY = axis === 'y';
     const isWall = MAP_[isY ? y + direction_on_axis : y][isX ? x + direction_on_axis : x] === 0;
 
-    if (isWall && direction) {
+    if (isWall) {
         if (MAP_[isY ? y+direction_on_axis : y+1][isX ? x+direction_on_axis : x+1] === 1) {
             return { 
                 y: isY ? y : y + 1,

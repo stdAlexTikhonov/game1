@@ -12,9 +12,10 @@ const main = () => {
                     store.dispatch({type: SAVE});
                     store.dispatch({type: SET_HUNTER_POSITION});
                     store.dispatch({type: SET_HUNTER_DIRECTION});
-                    store.dispatch({type: SET_DIRECTION}); 
+                    store.dispatch({type: SET_PLAYER_POSITION}); 
+                    store.dispatch({type: SET_PLAYER_DIRECTION}); 
                 } 
-
+  
             }
 
             
