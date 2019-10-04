@@ -1,5 +1,5 @@
 //config
-const FPS = 1;
+const FPS = 10;
 const WINDOW_WIDTH = 900;
 const WINDOW_HEIGHT = 700;
 const CELL_WIDTH = 50;

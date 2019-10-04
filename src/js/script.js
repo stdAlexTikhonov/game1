@@ -2,7 +2,6 @@ let frames = 0;
 
 const main = () => {
     if (frames % FPS === 0) {
-        
         const { game, timeline } = store.getState();
         const { process, pause } = game;
 
@@ -26,8 +25,6 @@ const main = () => {
             drawHunter();
             showPoints();
 
-      
-            window.requestAnimationFrame(main);
         } else {
             container.appendChild(block);
             score.style.display = 'none';
@@ -41,4 +38,5 @@ const main = () => {
     }
     
     frames++;
+    window.requestAnimationFrame(main);
 }
