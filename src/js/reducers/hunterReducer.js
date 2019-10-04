@@ -1,4 +1,12 @@
-const hunterReducer = (state = { x: 7, y: 7, path: [], history: [], currentStep: null}, action) => {
+const initHunter = {
+    x: 7,
+    y: 7,
+    path: [],
+    history: [],
+    currentStep: null
+};
+
+const hunterReducer = (state = initHunter, action) => {
     switch(action.type) {
         case SET_PATH:
             return {
