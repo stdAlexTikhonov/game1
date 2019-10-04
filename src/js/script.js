@@ -34,9 +34,9 @@ const main = () => {
         }
 
         store.dispatch({type: SET_TIMER});
-
+        if (process) window.requestAnimationFrame(main);
     }
     
     frames++;
-    window.requestAnimationFrame(main);
+    
 }
