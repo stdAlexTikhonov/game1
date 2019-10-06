@@ -44,6 +44,8 @@ const nextPlayerMove = () => {
     const { direction } = player;
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
+
+
     if (!game.pause && player.direction) {
         const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
         const isX = axis === 'x';
@@ -51,7 +53,7 @@ const nextPlayerMove = () => {
         const y = player.y + direction_on_axis;
         const x = player.x + direction_on_axis;
         const isWall = MAP_[isY ? y : player.y][isX ? x : player.x] === 0
-    
+
         if (isWall) {
             if (player.previousDirection === direction) store.dispatch({type: RESET_DIRECTION});
             if (MAP_[isY ? y : player.y+1][isX ? x : player.x+1] === 1) {
@@ -77,10 +79,7 @@ const nextPlayerMove = () => {
             const { x, y } = player.history[timeline.index];
             return { X: x, Y: y};
         }
-        else return {
-            Y: direction && !isWall && isY ? Y + game.timer * direction_on_axis : Y,
-            X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
-        }
+        else return {X,Y}
     }
 }
 

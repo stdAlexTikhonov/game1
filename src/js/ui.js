@@ -80,7 +80,9 @@ canvas.onpointermove = e => {
         if (Math.abs(diffLeft) < 5) return store.dispatch({type: PAUSE_TIME});
         else if (e.offsetX < pointerX) return store.dispatch({type: SWIPE_TIME_LEFT});
         else if (e.offsetX > pointerX) return store.dispatch({type: SWIPE_TIME_RIGHT});
-        
+    } else { 
+        store.dispatch({ type: RESET_TIMELINE});
+        //detetermine here X and y position on the map
     } 
 
     if (vertical) {
