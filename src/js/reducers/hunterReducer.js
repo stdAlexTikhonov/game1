@@ -52,7 +52,7 @@ const hunterReducer = (state = initHunter, action) => {
                 y
             }
         }
-        case SAVE: {
+        case SAVE_HUNTER: {
             const { history } = state;
             history.unshift({x: action.x, y: action.y});
             return {

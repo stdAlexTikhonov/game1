@@ -151,9 +151,8 @@ const drawHunter = () => {
         store.dispatch({type: SET_HUNTER_DIRECTION});
     }
 
-    const { hunter, game } = store.getState();
+    const { hunter, game, timeline } = store.getState();
     
-
     let X = hunter.x * CELL_WIDTH;
     let Y = hunter.y * CELL_WIDTH;
 
@@ -172,21 +171,29 @@ const drawHunter = () => {
                 X += game.timer;
                 break;
         }
+        store.dispatch({ type: SAVE_HUNTER, x: X, y: Y});
     } else {
-        switch(hunter.currentStep) {
-            case UP:
-                Y -= game.savedTimerPosition;
-                break;
-            case DOWN:
-                Y += game.savedTimerPosition;
-                break;
-            case LEFT:
-                X -= game.savedTimerPosition;
-                break;
-            case RIGHT:
-                X += game.savedTimerPosition;
-                break;
-        } 
+        // switch(hunter.currentStep) {
+        //     case UP:
+        //         Y -= game.savedTimerPosition;
+        //         break;
+        //     case DOWN:
+        //         Y += game.savedTimerPosition;
+        //         break;
+        //     case LEFT:
+        //         X -= game.savedTimerPosition;
+        //         break;
+        //     case RIGHT:
+        //         X += game.savedTimerPosition;
+        //         break;
+        // } 
+      
+        if (hunter.history.length === HISTORY_LENGTH) {
+            const { x, y } = hunter.history[timeline.index];
+            X = x;
+            Y = y;
+        }
+        
     }
 
 
