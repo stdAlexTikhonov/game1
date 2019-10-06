@@ -11,13 +11,40 @@ const clearWindow = () => {
     context.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 }
 
+const setPlayerPosition = (x,y,direction) => {
+    const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
+    const isX = axis === 'x';
+    const isY = axis === 'y';
+    const isWall = MAP_[isY ? y + direction_on_axis : y][isX ? x + direction_on_axis : x] === 0;
+
+    if (isWall) {
+        if (MAP_[isY ? y+direction_on_axis : y+1][isX ? x+direction_on_axis : x+1] === 1) {
+            return { 
+                y: isY ? y : y + 1,
+                x: isX ? x : x + 1
+            }
+        } else if (MAP_[isY ? y+direction_on_axis : y-1][isX ? x+direction_on_axis : x-1] === 1) {
+            return { 
+                y: isY ? y : y - 1,
+                x: isX ? x : x - 1
+            }
+        } 
+    }
+
+    return {
+        x: !isWall && isX ? x + direction_on_axis : x,
+        y: !isWall && isY ? y + direction_on_axis : y
+    }
+
+}
+
 const nextPlayerMove = () => {
     /*************** IF YOU WANT UNDERSTAND IT - GOOD LUCK **********************/
-    const {game, player} = store.getState();
+    const {game, player, timeline} = store.getState();
     const { direction } = player;
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
-    if (player.direction) {
+    if (!game.pause && player.direction) {
         const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
         const isX = axis === 'x';
         const isY = axis === 'y';
@@ -45,16 +72,52 @@ const nextPlayerMove = () => {
             Y: direction && !isWall && isY ? Y + game.timer * direction_on_axis : Y,
             X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
         }
-    } else return {Y,X}
+    } else {
+        if (player.history.length === HISTORY_LENGTH) {
+            const { x, y } = player.history[timeline.index];
+            return { X: x, Y: y};
+        }
+        else return {
+            Y: direction && !isWall && isY ? Y + game.timer * direction_on_axis : Y,
+            X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
+        }
+    }
 }
 
 const drawPlayer = () => {
+    const { game } = store.getState();
     const { X, Y } = nextPlayerMove();
+    if (!game.pause) store.dispatch({ type: SAVE, x: X, y: Y});
     context.beginPath();
     context.arc(X, Y, CELL_WIDTH/2, 0, 2 * Math.PI, false);
     context.fillStyle = PLAYER_COLOR;
     context.fill();
     context.closePath();
+}
+
+const drawTimeScale = () => {
+    const { timeline, game } = store.getState();
+    context.beginPath();
+    switch(timeline.direction) {
+        case LEFT:
+            if (timeline.index < 99) store.dispatch({ type: SET_INDEX, index: 1});
+            context.moveTo(100, WINDOW_HEIGHT - CELL_WIDTH);
+            context.lineTo(100, WINDOW_HEIGHT)
+            break;
+        case RIGHT:
+            if (timeline.index > 0) store.dispatch({ type: SET_INDEX, index: -1});
+            context.moveTo(800 , WINDOW_HEIGHT - CELL_WIDTH);
+            context.lineTo(800, WINDOW_HEIGHT)
+            break;
+        default:
+            context.moveTo(450, WINDOW_HEIGHT - CELL_WIDTH);
+            context.lineTo(450, WINDOW_HEIGHT)
+            break;
+    }
+    context.lineWidth = 2;
+    context.strokeStyle = 'red';
+    context.stroke()
+    context.closePath()
 }
 
 const findPath = () => {
@@ -79,8 +142,8 @@ const findPath = () => {
 }
 
 const drawHunter = () => {
-    
     const { hunter: hunter1, player } = store.getState();
+    
     if (!hunter1.currentStep) {
         if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
         const PATH = findPath();
@@ -88,31 +151,43 @@ const drawHunter = () => {
         store.dispatch({type: SET_HUNTER_DIRECTION});
     }
 
-    const { hunter, game } = store.getState();
-  
+    const { hunter, game, timeline } = store.getState();
+    
     let X = hunter.x * CELL_WIDTH;
     let Y = hunter.y * CELL_WIDTH;
 
-    switch(hunter.currentStep) {
-        case UP:
-            Y -= game.timer;
-            break;
-        case DOWN:
-            Y += game.timer;
-            break;
-        case LEFT:
-            X -= game.timer;
-            break;
-        case RIGHT:
-            X += game.timer;
-            break;
+    if (!game.pause) {
+        switch(hunter.currentStep) {
+            case UP:
+                Y -= game.timer;
+                break;
+            case DOWN:
+                Y += game.timer;
+                break;
+            case LEFT:
+                X -= game.timer;
+                break;
+            case RIGHT:
+                X += game.timer;
+                break;
+        }
+        store.dispatch({ type: SAVE_HUNTER, x: X, y: Y});
+    } else {
+        if (hunter.history.length === HISTORY_LENGTH) {
+            const { x, y } = hunter.history[timeline.index];
+            X = x;
+            Y = y;
+        }
+        
     }
+
 
     context.beginPath();
     context.fillStyle = HUNTER_COLOR;
     context.rect(X, Y, CELL_WIDTH, CELL_WIDTH);
     context.fill();
     context.closePath();
+
 }
 
 const showPoints = () => {
@@ -139,27 +214,4 @@ const drawMap = () => {
         }
       });
     });
-}
-
-
-//user actions
-let pointerX, pointerY;
-const onCanvasDownHandler = e => {
-    pointerX = e.offsetX;
-    pointerY = e.offsetY;
-}
-
-const onCanvasMoveHandler = e => {
-    const diffLeft = e.offsetX - pointerX;
-    const diffUp = e.offsetY - pointerY;
-    const vertical = Math.abs(diffLeft) < Math.abs(diffUp);
-    
-    if (vertical) {
-        if (e.offsetY > pointerY) store.dispatch({type: SWIPEDOWN});
-        else store.dispatch({type: SWIPEUP});
-    } else {
-        if (e.offsetX > pointerX) store.dispatch({type: SWIPERIGHT});
-        else store.dispatch({type: SWIPELEFT});
-    }
-    
 }

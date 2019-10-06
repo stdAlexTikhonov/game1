@@ -2,39 +2,41 @@ let frames = 0;
 
 const main = () => {
     if (frames % FPS === 0) {
-        store.dispatch({type: SET_TIMER});
-        
-        const { game } = store.getState();
-        const { history, process } = game;
+        const { game, timeline } = store.getState();
+        const { process, pause } = game;
 
         if (process) {
-            
-            if (game.timer === 0) {
-                store.dispatch({type: SET_HUNTER_POSITION});
-                store.dispatch({type: SET_HUNTER_DIRECTION});
-                store.dispatch({type: SET_DIRECTION}); 
+            if (!pause) {
+                
+                if (game.timer === 0) {
+                    store.dispatch({type: SET_HUNTER_POSITION});
+                    store.dispatch({type: SET_HUNTER_DIRECTION});
+                    store.dispatch({type: SET_PLAYER_POSITION}); 
+                    store.dispatch({type: SET_PLAYER_DIRECTION}); 
+                } 
+  
             }
+
             
-            //drawing==========================
             clearWindow();
             drawMap();
+            game.pause && drawTimeScale();
             drawPlayer();
             drawHunter();
             showPoints();
-            //logging==========================
-            // console.log("STEP:",time, "GAME IN PROGRESS")
-            // console.log("DIRECTION:", player.direction);
-            // console.log("POS timer: ", player.timer);
-            window.requestAnimationFrame(main);
+
         } else {
-            container.style.display = 'flex';
+            container.appendChild(block);
             score.style.display = 'none';
             text.innerHTML = 'YOU DEAD';
             block.classList.add('finished');
             
         }
 
+        store.dispatch({type: SET_TIMER});
+        if (process) window.requestAnimationFrame(main);
     }
     
     frames++;
+    
 }

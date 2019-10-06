@@ -5,16 +5,17 @@ document.body.style.padding = 0;
 
 //container
 const container = document.createElement('div');
-container.style.position = 'absolute';
+container.style.margin = '0 auto';
 container.style.display = 'flex';
-container.style.width = '100%';
-container.style.height = '100%';
+container.style.width = WINDOW_WIDTH;
+container.style.height = WINDOW_HEIGHT;
 container.id = 'container';
 document.body.appendChild(container);
 
 
 //main menu
 const block = document.createElement('div');
+block.style.position = 'absolute';
 block.style.display = 'flex';
 block.style.fontFamily = 'Tahoma';
 block.style.fontWeight = 'Bold';
@@ -33,8 +34,8 @@ block.onpointerdown = e => {
 
 block.onpointerup = e => {
     init();
-    container.style.display = 'none';
     block.onpointerup = null;
+    container.removeChild(block);
 }
 
 const text = document.createElement('div');
@@ -48,7 +49,7 @@ const canvas = document.createElement('canvas');
 canvas.style.margin = 'auto';
 canvas.width = WINDOW_WIDTH;
 canvas.height = WINDOW_HEIGHT;
-document.body.appendChild(canvas);
+container.appendChild(canvas);
 
 //score block
 const score = document.createElement('div');
@@ -60,6 +61,35 @@ document.body.appendChild(score);
 
 const context = canvas.getContext('2d');
 
-canvas.onpointerdown = onCanvasDownHandler;
+let pointerX, pointerY;
+canvas.onpointerdown = e => {
+    const { game } = store.getState();
+    pointerX = e.offsetX;
+    pointerY = e.offsetY;
+    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH && game.pause) return;
+    else if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) store.dispatch({type: PAUSE});
+    else store.dispatch({type: START});
+};
 
-canvas.onpointermove = onCanvasMoveHandler;
+canvas.onpointermove = e => {
+    const diffLeft = e.offsetX - pointerX;
+    const diffUp = e.offsetY - pointerY;
+    const vertical = Math.abs(diffLeft) < Math.abs(diffUp);
+
+    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) {
+        if (Math.abs(diffLeft) < 5) return store.dispatch({type: PAUSE_TIME});
+        else if (e.offsetX < pointerX) return store.dispatch({type: SWIPE_TIME_LEFT});
+        else if (e.offsetX > pointerX) return store.dispatch({type: SWIPE_TIME_RIGHT});
+        
+    } 
+
+    if (vertical) {
+        if (e.offsetY > pointerY) store.dispatch({type: SWIPEDOWN});
+        else store.dispatch({type: SWIPEUP});
+    } else {
+        if (e.offsetX > pointerX) store.dispatch({type: SWIPERIGHT});
+        else store.dispatch({type: SWIPELEFT});
+    }
+    
+};
+

@@ -3,3 +3,4 @@ const START = 'START';
 const RESET = 'RESET';
 const STOP = 'STOP';
 const SET_TIMER = 'SET_TIMER';
+const PAUSE = 'PAUSE';

@@ -1,9 +1,19 @@
-const gameReducer = (state = { history: [], process: false, timer: 0}, action) => {
+const initGame = {
+    pause: false,
+    process: false,
+    timer: 0,
+    savedTimerPosition: null
+};
+
+const gameReducer = (state = initGame, action) => {
     switch (action.type) {
-        case SAVE:
-            return Object.assign(state, { history: state.history.concat([action.payload])});
-        case START: 
-            return Object.assign(state, { 'process': true});
+        case START:
+            return {
+                ...state,
+                process: true,
+                pause: false,
+                savedTimerPosition: null
+            }
         case STOP:
             return {
                 ...state,
@@ -14,10 +24,11 @@ const gameReducer = (state = { history: [], process: false, timer: 0}, action) =
                 ...state,
                 timer: (state.timer + STEP) % CELL_WIDTH
             }
-        case RESET:
+        case PAUSE: 
             return {
-                history: [],
-                process: false
+                ...state,
+                pause: true,
+                savedTimerPosition: state.timer
             }
         default:
             return state;
