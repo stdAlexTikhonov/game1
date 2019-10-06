@@ -173,21 +173,6 @@ const drawHunter = () => {
         }
         store.dispatch({ type: SAVE_HUNTER, x: X, y: Y});
     } else {
-        // switch(hunter.currentStep) {
-        //     case UP:
-        //         Y -= game.savedTimerPosition;
-        //         break;
-        //     case DOWN:
-        //         Y += game.savedTimerPosition;
-        //         break;
-        //     case LEFT:
-        //         X -= game.savedTimerPosition;
-        //         break;
-        //     case RIGHT:
-        //         X += game.savedTimerPosition;
-        //         break;
-        // } 
-      
         if (hunter.history.length === HISTORY_LENGTH) {
             const { x, y } = hunter.history[timeline.index];
             X = x;
