@@ -7,8 +7,8 @@ const main = () => {
 
         if (process) {
             if (!pause) {
+                
                 if (game.timer === 0) {
-                    store.dispatch({type: SAVE});
                     store.dispatch({type: SET_HUNTER_POSITION});
                     store.dispatch({type: SET_HUNTER_DIRECTION});
                     store.dispatch({type: SET_PLAYER_POSITION}); 

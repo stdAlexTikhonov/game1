@@ -40,11 +40,11 @@ const setPlayerPosition = (x,y,direction) => {
 
 const nextPlayerMove = () => {
     /*************** IF YOU WANT UNDERSTAND IT - GOOD LUCK **********************/
-    const {game, player} = store.getState();
+    const {game, player, timeline} = store.getState();
     const { direction } = player;
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
-    if (player.direction && !game.pause) {
+    if (!game.pause && player.direction) {
         const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
         const isX = axis === 'x';
         const isY = axis === 'y';
@@ -73,26 +73,21 @@ const nextPlayerMove = () => {
             X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
         }
     } else {
-        switch(direction) {
-            case UP:
-                Y -= game.savedTimerPosition;
-                break;
-            case DOWN:
-                Y += game.savedTimerPosition;
-                break;
-            case LEFT:
-                X -= game.savedTimerPosition;
-                break;
-            case RIGHT:
-                X += game.savedTimerPosition;
-                break;
+        if (player.history.length === HISTORY_LENGTH) {
+            const { x, y } = player.history[timeline.index];
+            return { X: x, Y: y};
         }
-        return {Y,X}
+        else return {
+            Y: direction && !isWall && isY ? Y + game.timer * direction_on_axis : Y,
+            X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
+        }
     }
 }
 
 const drawPlayer = () => {
+    const { game } = store.getState();
     const { X, Y } = nextPlayerMove();
+    if (!game.pause) store.dispatch({ type: SAVE, x: X, y: Y});
     context.beginPath();
     context.arc(X, Y, CELL_WIDTH/2, 0, 2 * Math.PI, false);
     context.fillStyle = PLAYER_COLOR;
@@ -105,10 +100,12 @@ const drawTimeScale = () => {
     context.beginPath();
     switch(timeline.direction) {
         case LEFT:
+            if (timeline.index < 99) store.dispatch({ type: SET_INDEX, index: 1});
             context.moveTo(100, WINDOW_HEIGHT - CELL_WIDTH);
             context.lineTo(100, WINDOW_HEIGHT)
             break;
         case RIGHT:
+            if (timeline.index > 0) store.dispatch({ type: SET_INDEX, index: -1});
             context.moveTo(800 , WINDOW_HEIGHT - CELL_WIDTH);
             context.lineTo(800, WINDOW_HEIGHT)
             break;

@@ -71,7 +71,7 @@ const  playerReducer = (state = initPlayer, action) => {
             }
         case SAVE: {
             const { history } = state;
-            history.unshift({ x: state.x, y: state.y});
+            history.unshift({ x: action.x, y: action.y});
             return {
                 ...state,
                 history: history.slice(0,HISTORY_LENGTH)

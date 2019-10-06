@@ -1,7 +1,7 @@
 const initTimeline = { 
     x: WINDOW_WIDTH - TIME_STEP, 
     direction: null,
-    index: 10,
+    index: 0,
     timemashine: false
 };
 
@@ -21,6 +21,11 @@ const  timelineReducer = (state = initTimeline, action) => {
             return {
                 ...state,
                 direction: null
+            }
+        case SET_INDEX:
+            return {
+                ...state,
+                index: state.index + action.index
             }
         default:
             return state;
