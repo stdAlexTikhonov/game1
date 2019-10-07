@@ -75,9 +75,12 @@ const nextPlayerMove = () => {
             X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
         }
     } else {
-        if (player.history.length === HISTORY_LENGTH) {
-            const { x, y } = player.history[timeline.index];
-            return { X: x, Y: y};
+        if (player.history.length === HISTORY_LENGTH && game.pause) {
+            const { x: x1, y: y1 } = player.history[timeline.index];
+            const x =(x1 - CELL_WIDTH/2) / CELL_WIDTH;
+            const y = (y1 - CELL_WIDTH/2) / CELL_WIDTH;
+            if (Number.isInteger(x) && Number.isInteger(y)) store.dispatch({ type: SET_PLAYER_POSITION_FROM_HISTORY, x, y})
+            return { X: x1, Y: y1};
         }
         else return {X,Y}
     }
@@ -86,7 +89,7 @@ const nextPlayerMove = () => {
 const drawPlayer = () => {
     const { game } = store.getState();
     const { X, Y } = nextPlayerMove();
-    if (!game.pause) store.dispatch({ type: SAVE, x: X, y: Y});
+    if (!game.pause) store.dispatch({ type: SAVE, x: X, y: Y}); 
     context.beginPath();
     context.arc(X, Y, CELL_WIDTH/2, 0, 2 * Math.PI, false);
     context.fillStyle = PLAYER_COLOR;
@@ -171,11 +174,16 @@ const drawHunter = () => {
                 break;
         }
         store.dispatch({ type: SAVE_HUNTER, x: X, y: Y});
+       
     } else {
         if (hunter.history.length === HISTORY_LENGTH) {
-            const { x, y } = hunter.history[timeline.index];
-            X = x;
-            Y = y;
+            const { x: x1, y: y1 } = hunter.history[timeline.index];
+            const x = x1 / CELL_WIDTH;
+            const y = y1 / CELL_WIDTH;
+            if (Number.isInteger(x) && Number.isInteger(y)) store.dispatch({ type: SET_HUNTER_POSITION_FROM_HISTORY, x, y})
+            
+            X = x1;
+            Y = y1;
         }
         
     }

@@ -23,11 +23,11 @@ const hunterReducer = (state = initHunter, action) => {
                 ...state,
                 history: state.history.reverse()
             }
-        case SET_POSITION_FROM_HISTORY:
+        case SET_HUNTER_POSITION_FROM_HISTORY: 
             return {
                 ...state,
-                x: state.history[action.index].x,
-                y: state.history[action.index].y
+                x: action.x,
+                y: action.y
             }
         case SET_HUNTER_POSITION: {
             let {x, y} = state;

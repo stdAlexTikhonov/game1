@@ -61,14 +61,17 @@ document.body.appendChild(score);
 
 const context = canvas.getContext('2d');
 
-let pointerX, pointerY;
+let pointerX, pointerY, gamePause = false;
 canvas.onpointerdown = e => {
     const { game } = store.getState();
+    gamePause = game.pause;
     pointerX = e.offsetX;
     pointerY = e.offsetY;
     if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH && game.pause) return;
     else if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) store.dispatch({type: PAUSE});
-    else store.dispatch({type: START});
+    else if (game.pause) { 
+        store.dispatch({type: START})
+    };
 };
 
 canvas.onpointermove = e => {
@@ -80,9 +83,11 @@ canvas.onpointermove = e => {
         if (Math.abs(diffLeft) < 5) return store.dispatch({type: PAUSE_TIME});
         else if (e.offsetX < pointerX) return store.dispatch({type: SWIPE_TIME_LEFT});
         else if (e.offsetX > pointerX) return store.dispatch({type: SWIPE_TIME_RIGHT});
-    } else { 
+    } else if (gamePause) { 
         store.dispatch({ type: RESET_TIMELINE});
-        //detetermine here X and y position on the map
+        const PATH = findPath();
+        store.dispatch({type: SET_PATH, path: PATH});
+        store.dispatch({type: SET_HUNTER_DIRECTION});
     } 
 
     if (vertical) {

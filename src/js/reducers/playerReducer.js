@@ -33,12 +33,12 @@ const  playerReducer = (state = initPlayer, action) => {
             }
         }
 
-        case SET_POSITION_FROM_HISTORY:
-                return {
-                    ...state,
-                    x: state.history[action.index].x,
-                    y: state.history[action.index].y
-                }
+        case SET_PLAYER_POSITION_FROM_HISTORY: 
+            return {
+                ...state,
+                x: action.x,
+                y: action.y
+            }
         case SET_PLAYER_POSITION: {
             let {x, y} = state;
             const { x: newx, y: newy} = state.direction ? setPlayerPosition(x,y,state.direction) : { x, y};
