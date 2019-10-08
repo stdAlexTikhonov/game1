@@ -14,6 +14,74 @@ document.body.appendChild(container);
 
 
 //main menu
+const menu = document.createElement('div');
+menu.style.position = 'absolute';
+menu.style.display = 'flex';
+menu.style.fontFamily = 'Tahoma';
+menu.style.fontWeight = 'Bold';
+menu.style.margin = 'auto';
+menu.style.boxSizing = 'border-box';
+menu.style.width = WINDOW_WIDTH + 'px';
+menu.style.height = WINDOW_HEIGHT + 'px';
+menu.style.background = 'black';
+menu.style.flexDirection = 'column';
+menu.style.fontFamily = 'Tahoma';
+menu.style.fontWeight = 'bold';
+menu.style.fontSize = '20px';
+menu.style.color = 'white';
+menu.style.padding = '20px 0';
+container.appendChild(menu);
+
+const header = document.createElement('div');
+header.innerHTML = 'Template';
+header.style.color = 'white';
+header.style.borderBottom = '2px solid';
+header.style.padding = '0 20px';
+menu.appendChild(header);
+
+const content = document.createElement('div');
+content.style.flexGrow = 1;
+content.style.display = 'flex';
+content.style.padding = '20px';
+
+const template = document.createElement('div');
+template.style.width = '100px';
+template.style.height = '100px';
+template.style.border = '2px solid white';
+template.style.borderRadius = '25px';
+
+template.onclick = () => {
+    init();
+    container.removeChild(menu);
+}
+
+content.appendChild(template);
+
+menu.appendChild(content);
+
+const footer = document.createElement('div');
+footer.style.color = 'white';
+footer.style.borderTop = '2px solid';
+footer.style.display = 'flex';
+footer.style.padding = '10px 20px 0';
+footer.style.justifyContent = 'space-between';
+
+
+const leftBtn = document.createElement('div');
+leftBtn.innerHTML = 'Options';
+footer.appendChild(leftBtn);
+
+const exitBtn = document.createElement('div');
+exitBtn.innerHTML = 'Exit';
+
+exitBtn.onclick = () => window.close();
+footer.appendChild(exitBtn);
+
+
+
+menu.appendChild(footer);
+
+
 const block = document.createElement('div');
 block.style.position = 'absolute';
 block.style.display = 'flex';
@@ -33,7 +101,7 @@ block.onpointerdown = e => {
 }
 
 block.onpointerup = e => {
-    init();
+    //init();
     block.onpointerup = null;
     container.removeChild(block);
 }
