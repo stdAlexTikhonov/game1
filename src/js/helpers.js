@@ -66,7 +66,7 @@ const nextPlayerMove = () => {
         const x = player.x + direction_on_axis;
         const isWall = MAP_[isY ? y : player.y][isX ? x : player.x] === 0
 
-        if (isWall) {
+        if (!isTurboActive && isWall) {
             if (player.previousDirection === direction) store.dispatch({type: RESET_DIRECTION});
             if (MAP_[isY ? y : player.y+1][isX ? x : player.x+1] === 1) {
                 return {
@@ -99,7 +99,8 @@ const nextPlayerMove = () => {
 }
 
 const drawPlayer = () => {
-    const { game } = store.getState();
+    const { game, player } = store.getState();
+    let { isTurboActive, turboscores } = player;
     const { X, Y } = nextPlayerMove();
     if (!game.pause) store.dispatch({ type: SAVE, x: X, y: Y}); 
     context.beginPath();
@@ -107,6 +108,16 @@ const drawPlayer = () => {
     context.fillStyle = PLAYER_COLOR;
     context.fill();
     context.closePath();
+    if (isTurboActive) {
+        store.dispatch({ type: SLOWDOWN});
+        while(turboscores > 0) {
+            store.dispatch({type: SET_PLAYER_POSITION}); 
+            store.dispatch({type: SET_PLAYER_DIRECTION}); 
+            drawPlayer();
+            turboscores--;
+        }
+        
+    }
 }
 
 const drawTimeScale = () => {
