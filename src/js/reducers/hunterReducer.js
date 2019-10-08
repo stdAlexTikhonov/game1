@@ -30,26 +30,13 @@ const hunterReducer = (state = initHunter, action) => {
                 y: action.y
             }
         case SET_HUNTER_POSITION: {
-            let {x, y} = state;
-
-            switch(state.currentStep) {
-                case LEFT:
-                    x -= 1;
-                    break;
-                case RIGHT:
-                    x += 1;
-                    break;
-                case UP:
-                    y -= 1;
-                    break;
-                case DOWN:
-                    y += 1;
-                    break;
-            }
+            let {x, y, currentStep} = state;
+            const { x: xnew, y: ynew } = currentStep ? setHunterPosition(x,y,currentStep) : {x, y};
+        
             return {
                 ...state,
-                x,
-                y
+                x: xnew,
+                y: ynew
             }
         }
         case SAVE_HUNTER: {

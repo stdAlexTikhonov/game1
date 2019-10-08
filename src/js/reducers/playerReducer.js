@@ -32,7 +32,6 @@ const  playerReducer = (state = initPlayer, action) => {
                 lastUserDirection: DOWN
             }
         }
-
         case SET_PLAYER_POSITION_FROM_HISTORY: 
             return {
                 ...state,

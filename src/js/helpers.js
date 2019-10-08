@@ -11,6 +11,17 @@ const clearWindow = () => {
     context.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 }
 
+const setHunterPosition = (x,y,direction, value = 1) => {
+    const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
+    const isX = axis === 'x';
+    const isY = axis === 'y';
+
+    return {
+        x: isX ? x + direction_on_axis * value : x,
+        y: isY ? y + direction_on_axis * value : y
+    }
+}
+
 const setPlayerPosition = (x,y,direction) => {
     const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
     const isX = axis === 'x';
@@ -75,7 +86,7 @@ const nextPlayerMove = () => {
             X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
         }
     } else {
-        if (player.history.length === HISTORY_LENGTH && game.pause) {
+        if (timeline.index < player.history.length && game.pause) {
             const { x: x1, y: y1 } = player.history[timeline.index];
             const x =(x1 - CELL_WIDTH/2) / CELL_WIDTH;
             const y = (y1 - CELL_WIDTH/2) / CELL_WIDTH;
@@ -159,24 +170,14 @@ const drawHunter = () => {
     let Y = hunter.y * CELL_WIDTH;
 
     if (!game.pause) {
-        switch(hunter.currentStep) {
-            case UP:
-                Y -= game.timer;
-                break;
-            case DOWN:
-                Y += game.timer;
-                break;
-            case LEFT:
-                X -= game.timer;
-                break;
-            case RIGHT:
-                X += game.timer;
-                break;
-        }
-        store.dispatch({ type: SAVE_HUNTER, x: X, y: Y});
+        const {x, y} = hunter.currentStep ? setHunterPosition(X,Y, hunter.currentStep, game.timer) : { x: X, y: Y};
+
+        X = x;
+        Y = y;
+        store.dispatch({ type: SAVE_HUNTER, x, y});
        
     } else {
-        if (hunter.history.length === HISTORY_LENGTH) {
+        if (timeline.index < hunter.history.length) {
             const { x: x1, y: y1 } = hunter.history[timeline.index];
             const x = x1 / CELL_WIDTH;
             const y = y1 / CELL_WIDTH;
