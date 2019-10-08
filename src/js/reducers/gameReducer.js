@@ -1,8 +1,7 @@
 const initGame = {
     pause: false,
     process: false,
-    timer: 0,
-    savedTimerPosition: null
+    timer: 0
 };
 
 const gameReducer = (state = initGame, action) => {
@@ -11,8 +10,7 @@ const gameReducer = (state = initGame, action) => {
             return {
                 ...state,
                 process: true,
-                pause: false,
-                savedTimerPosition: null
+                pause: false
             }
         case STOP:
             return {
@@ -27,8 +25,7 @@ const gameReducer = (state = initGame, action) => {
         case PAUSE: 
             return {
                 ...state,
-                pause: true,
-                savedTimerPosition: state.timer
+                pause: true
             }
         default:
             return state;
