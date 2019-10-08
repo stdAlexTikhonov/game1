@@ -5,6 +5,8 @@ const initPlayer = {
     lastUserDirection: null,
     previousDirection: null,
     points: 0,
+    turboscores: 10,
+    isTurboActive: false,
     foodMap: ['11'],
     history: []
 };
@@ -32,7 +34,7 @@ const  playerReducer = (state = initPlayer, action) => {
                 lastUserDirection: DOWN
             }
         }
-        case SET_PLAYER_POSITION_FROM_HISTORY: 
+        case SET_CALCULATED_PLAYER_POSITION: 
             return {
                 ...state,
                 x: action.x,
@@ -40,10 +42,11 @@ const  playerReducer = (state = initPlayer, action) => {
             }
         case SET_PLAYER_POSITION: {
             let {x, y} = state;
-            const { x: newx, y: newy} = state.direction ? setPlayerPosition(x,y,state.direction) : { x, y};
+            const { x: newx, y: newy} = state.direction ? setPlayerPosition() : { x, y};
             return {
                 ...state,
                 points: state.direction && !state.foodMap.includes(`${newy + '' + newx}`) ? state.points + 1 : state.points,
+                // turboscores: state.turboscores < 10 && !state.foodMap.includes(`${newy + '' + newx}`) ? state.turboscores + 1 : state.turboscores,
                 foodMap: state.foodMap.includes(`${newy + '' + newx}`) ? state.foodMap : state.foodMap.concat([`${newy + '' + newx}`]),
                 x: newx,
                 y: newy,
@@ -76,6 +79,16 @@ const  playerReducer = (state = initPlayer, action) => {
                 history: history.slice(0,HISTORY_LENGTH)
             }
         }
+        case TURBOBOOST:
+            return {
+                ...state,
+                isTurboActive: true
+            }
+        case SLOWDOWN:
+            return {
+                ...state,
+                isTurboActive: false
+            }
         default:
             return state;
     }

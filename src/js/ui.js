@@ -68,9 +68,9 @@ canvas.onpointerdown = e => {
     pointerX = e.offsetX;
     pointerY = e.offsetY;
     if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH && game.pause) return;
-    else if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) store.dispatch({type: PAUSE});
-    else if (game.pause) { 
-        store.dispatch({type: START})
+    else if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) store.dispatch({ type: PAUSE });
+    else if (game.pause) {
+        store.dispatch({ type: START })
     };
 };
 
@@ -80,23 +80,26 @@ canvas.onpointermove = e => {
     const vertical = Math.abs(diffLeft) < Math.abs(diffUp);
 
     if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) {
-        if (Math.abs(diffLeft) < 5) return store.dispatch({type: PAUSE_TIME});
-        else if (e.offsetX < pointerX) return store.dispatch({type: SWIPE_TIME_LEFT});
-        else if (e.offsetX > pointerX) return store.dispatch({type: SWIPE_TIME_RIGHT});
-    } else if (gamePause) { 
-        store.dispatch({ type: RESET_TIMELINE});
+        if (Math.abs(diffLeft) < 5) return store.dispatch({ type: PAUSE_TIME });
+        else if (e.offsetX < pointerX) return store.dispatch({ type: SWIPE_TIME_LEFT });
+        else if (e.offsetX > pointerX) return store.dispatch({ type: SWIPE_TIME_RIGHT });
+    } else if (gamePause) {
+        store.dispatch({ type: RESET_TIMELINE });
         const PATH = findPath();
-        store.dispatch({type: SET_PATH, path: PATH});
-        store.dispatch({type: SET_HUNTER_DIRECTION});
-    } 
+        store.dispatch({ type: SET_PATH, path: PATH });
+        store.dispatch({ type: SET_HUNTER_DIRECTION });
+    }
 
     if (vertical) {
-        if (e.offsetY > pointerY) store.dispatch({type: SWIPEDOWN});
-        else store.dispatch({type: SWIPEUP});
+        if (e.offsetY > pointerY) store.dispatch({ type: SWIPEDOWN });
+        else store.dispatch({ type: SWIPEUP });
     } else {
-        if (e.offsetX > pointerX) store.dispatch({type: SWIPERIGHT});
-        else store.dispatch({type: SWIPELEFT});
+        if (e.offsetX > pointerX) store.dispatch({ type: SWIPERIGHT });
+        else store.dispatch({ type: SWIPELEFT });
     }
-    
+
 };
 
+canvas.ondblclick = e => {
+    store.dispatch({ type: TURBOBOOST });
+}

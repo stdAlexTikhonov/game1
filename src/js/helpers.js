@@ -22,7 +22,9 @@ const setHunterPosition = (x,y,direction, value = 1) => {
     }
 }
 
-const setPlayerPosition = (x,y,direction) => {
+const setPlayerPosition = () => {
+    const { player } = store.getState();
+    const { x, y, direction, isTurboActive } = player;
     const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
     const isX = axis === 'x';
     const isY = axis === 'y';
@@ -52,10 +54,9 @@ const setPlayerPosition = (x,y,direction) => {
 const nextPlayerMove = () => {
     /*************** IF YOU WANT UNDERSTAND IT - GOOD LUCK **********************/
     const {game, player, timeline} = store.getState();
-    const { direction } = player;
+    const { direction, turboscores, isTurboActive } = player;
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
-
 
     if (!game.pause && player.direction) {
         const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
@@ -65,7 +66,7 @@ const nextPlayerMove = () => {
         const x = player.x + direction_on_axis;
         const isWall = MAP_[isY ? y : player.y][isX ? x : player.x] === 0
 
-        if (isWall) {
+        if (!isTurboActive && isWall) {
             if (player.previousDirection === direction) store.dispatch({type: RESET_DIRECTION});
             if (MAP_[isY ? y : player.y+1][isX ? x : player.x+1] === 1) {
                 return {
@@ -79,18 +80,18 @@ const nextPlayerMove = () => {
                 }
             }
         }
-    
+        
 
-    return {
-            Y: direction && !isWall && isY ? Y + game.timer * direction_on_axis : Y,
-            X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
-        }
+        return {
+                Y: direction && !isWall && isY ? Y + game.timer * direction_on_axis : Y,
+                X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
+            }
     } else {
         if (timeline.index < player.history.length && game.pause) {
             const { x: x1, y: y1 } = player.history[timeline.index];
             const x =(x1 - CELL_WIDTH/2) / CELL_WIDTH;
             const y = (y1 - CELL_WIDTH/2) / CELL_WIDTH;
-            if (Number.isInteger(x) && Number.isInteger(y)) store.dispatch({ type: SET_PLAYER_POSITION_FROM_HISTORY, x, y})
+            if (Number.isInteger(x) && Number.isInteger(y)) store.dispatch({ type: SET_CALCULATED_PLAYER_POSITION, x, y})
             return { X: x1, Y: y1};
         }
         else return {X,Y}
@@ -98,7 +99,8 @@ const nextPlayerMove = () => {
 }
 
 const drawPlayer = () => {
-    const { game } = store.getState();
+    const { game, player } = store.getState();
+    let { isTurboActive, turboscores } = player;
     const { X, Y } = nextPlayerMove();
     if (!game.pause) store.dispatch({ type: SAVE, x: X, y: Y}); 
     context.beginPath();
@@ -106,6 +108,16 @@ const drawPlayer = () => {
     context.fillStyle = PLAYER_COLOR;
     context.fill();
     context.closePath();
+    if (isTurboActive) {
+        store.dispatch({ type: SLOWDOWN});
+        while(turboscores > 0) {
+            store.dispatch({type: SET_PLAYER_POSITION}); 
+            store.dispatch({type: SET_PLAYER_DIRECTION}); 
+            drawPlayer();
+            turboscores--;
+        }
+        
+    }
 }
 
 const drawTimeScale = () => {
@@ -200,7 +212,7 @@ const drawHunter = () => {
 
 const showPoints = () => {
     const { player } = store.getState();
-    score.innerHTML = player.points;
+    score.innerHTML = player.turboscores;
 }
 
 const drawMap = () => {
