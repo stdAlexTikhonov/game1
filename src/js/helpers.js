@@ -53,7 +53,7 @@ const setPlayerPosition = () => {
 
 const nextPlayerMove = () => {
     /*************** IF YOU WANT UNDERSTAND IT - GOOD LUCK **********************/
-    const {game, player, timeline} = store.getState();
+    const {game, player} = store.getState();
     const { direction, turboscores, isTurboActive } = player;
     let X = player.x * CELL_WIDTH + CELL_WIDTH/2;
     let Y = player.y * CELL_WIDTH + CELL_WIDTH/2;
@@ -87,8 +87,8 @@ const nextPlayerMove = () => {
                 X: direction && !isWall && isX ? X + game.timer * direction_on_axis : X
             }
     } else {
-        if (timeline.index < player.history.length && game.pause) {
-            const { x: x1, y: y1 } = player.history[timeline.index];
+        if (game.index < player.history.length && game.pause) {
+            const { x: x1, y: y1 } = player.history[game.index];
             const x =(x1 - CELL_WIDTH/2) / CELL_WIDTH;
             const y = (y1 - CELL_WIDTH/2) / CELL_WIDTH;
             if (Number.isInteger(x) && Number.isInteger(y)) store.dispatch({ type: SET_CALCULATED_PLAYER_POSITION, x, y})
@@ -121,16 +121,16 @@ const drawPlayer = () => {
 }
 
 const drawTimeScale = () => {
-    const { timeline, game } = store.getState();
+    const { game } = store.getState();
     context.beginPath();
-    switch(timeline.direction) {
+    switch(game.direction) {
         case LEFT:
-            if (timeline.index < 99) store.dispatch({ type: SET_INDEX, index: 1});
+            if (game.index < 99) store.dispatch({ type: SET_INDEX, index: 1});
             context.moveTo(100, WINDOW_HEIGHT - CELL_WIDTH);
             context.lineTo(100, WINDOW_HEIGHT)
             break;
         case RIGHT:
-            if (timeline.index > 0) store.dispatch({ type: SET_INDEX, index: -1});
+            if (game.index > 0) store.dispatch({ type: SET_INDEX, index: -1});
             context.moveTo(800 , WINDOW_HEIGHT - CELL_WIDTH);
             context.lineTo(800, WINDOW_HEIGHT)
             break;
@@ -176,7 +176,7 @@ const drawHunter = () => {
         store.dispatch({type: SET_HUNTER_DIRECTION});
     }
 
-    const { hunter, game, timeline } = store.getState();
+    const { hunter, game } = store.getState();
     
     let X = hunter.x * CELL_WIDTH;
     let Y = hunter.y * CELL_WIDTH;
@@ -189,8 +189,8 @@ const drawHunter = () => {
         store.dispatch({ type: SAVE_HUNTER, x, y});
        
     } else {
-        if (timeline.index < hunter.history.length) {
-            const { x: x1, y: y1 } = hunter.history[timeline.index];
+        if (game.index < hunter.history.length) {
+            const { x: x1, y: y1 } = hunter.history[game.index];
             const x = x1 / CELL_WIDTH;
             const y = y1 / CELL_WIDTH;
             if (Number.isInteger(x) && Number.isInteger(y)) store.dispatch({ type: SET_HUNTER_POSITION_FROM_HISTORY, x, y})

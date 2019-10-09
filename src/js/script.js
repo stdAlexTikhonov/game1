@@ -2,7 +2,7 @@ let frames = 0;
 
 const main = () => {
     if (frames % FPS === 0) {
-        const { game, timeline } = store.getState();
+        const { game } = store.getState();
         const { process, pause } = game;
 
         if (process) {
