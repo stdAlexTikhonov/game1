@@ -27,7 +27,7 @@ const main = () => {
 
         } else {
             container.appendChild(block);
-            score.style.display = 'none';
+            container.removeChild(infoblock);
             text.innerHTML = 'YOU DEAD';
             block.classList.add('finished');
             

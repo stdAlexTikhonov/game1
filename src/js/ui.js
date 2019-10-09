@@ -7,6 +7,7 @@ document.body.style.padding = 0;
 const container = document.createElement('div');
 container.style.margin = '0 auto';
 container.style.display = 'flex';
+container.style.flexDirection = 'column';
 container.style.width = WINDOW_WIDTH;
 container.style.height = WINDOW_HEIGHT;
 container.id = 'container';
@@ -53,6 +54,7 @@ template.style.borderRadius = '25px';
 template.onclick = () => {
     init();
     container.removeChild(menu);
+    container.appendChild(infoblock);
 }
 
 content.appendChild(template);
@@ -119,12 +121,24 @@ canvas.width = WINDOW_WIDTH;
 canvas.height = WINDOW_HEIGHT;
 container.appendChild(canvas);
 
+
+//infoblock
+const infoblock = document.createElement('div');
+infoblock.style.borderTop = '2px solid white';
+infoblock.style.padding = '10px 20px';
+infoblock.style.fontWeight = 'bold';
+infoblock.style.display = 'flex';
+infoblock.style.background = 'black';
+
 //score block
 const score = document.createElement('div');
 score.style.fontFamily = 'Tahoma';
 score.style.fontWeight = 'Bold';
+score.style.color = 'white';
 score.innerHTML = 0;
-document.body.appendChild(score);
+infoblock.appendChild(score);
+
+
 
 
 const context = canvas.getContext('2d');
