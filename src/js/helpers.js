@@ -212,7 +212,7 @@ const drawHunter = () => {
 
 const showPoints = () => {
     const { player } = store.getState();
-    score.innerHTML = player.turboscores;
+    score.innerHTML = 'Score: ' + player.points;
 }
 
 const drawMap = () => {
