@@ -20,7 +20,6 @@ const main = () => {
             
             clearWindow();
             drawMap();
-            game.pause && drawTimeScale();
             drawPlayer();
             drawHunter();
             showPoints();
