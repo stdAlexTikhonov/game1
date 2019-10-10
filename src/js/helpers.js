@@ -120,30 +120,6 @@ const drawPlayer = () => {
     }
 }
 
-const drawTimeScale = () => {
-    const { game } = store.getState();
-    context.beginPath();
-    switch(game.direction) {
-        case LEFT:
-            if (game.index < 99) store.dispatch({ type: SET_INDEX, index: 1});
-            context.moveTo(100, WINDOW_HEIGHT - CELL_WIDTH);
-            context.lineTo(100, WINDOW_HEIGHT)
-            break;
-        case RIGHT:
-            if (game.index > 0) store.dispatch({ type: SET_INDEX, index: -1});
-            context.moveTo(800 , WINDOW_HEIGHT - CELL_WIDTH);
-            context.lineTo(800, WINDOW_HEIGHT)
-            break;
-        default:
-            context.moveTo(450, WINDOW_HEIGHT - CELL_WIDTH);
-            context.lineTo(450, WINDOW_HEIGHT)
-            break;
-    }
-    context.lineWidth = 2;
-    context.strokeStyle = 'red';
-    context.stroke()
-    context.closePath()
-}
 
 const findPath = () => {
     const { hunter, player } = store.getState();

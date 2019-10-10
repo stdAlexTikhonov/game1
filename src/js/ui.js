@@ -103,7 +103,6 @@ block.onpointerdown = e => {
 }
 
 block.onpointerup = e => {
-    //init();
     block.onpointerup = null;
     container.removeChild(block);
 }
@@ -149,10 +148,9 @@ canvas.onpointerdown = e => {
     gamePause = game.pause;
     pointerX = e.offsetX;
     pointerY = e.offsetY;
-    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH && game.pause) return;
-    else if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) store.dispatch({ type: PAUSE });
-    else if (game.pause) {
-        store.dispatch({ type: START })
+    if (game.pause) {
+        store.dispatch({ type: START });
+        container.removeChild(slider);
     };
 };
 
@@ -161,11 +159,7 @@ canvas.onpointermove = e => {
     const diffUp = e.offsetY - pointerY;
     const vertical = Math.abs(diffLeft) < Math.abs(diffUp);
 
-    if (e.offsetY > WINDOW_HEIGHT - CELL_WIDTH) {
-        if (Math.abs(diffLeft) < 5) return store.dispatch({ type: PAUSE_TIME });
-        else if (e.offsetX < pointerX) return store.dispatch({ type: SWIPE_TIME_LEFT });
-        else if (e.offsetX > pointerX) return store.dispatch({ type: SWIPE_TIME_RIGHT });
-    } else if (gamePause) {
+   if (gamePause) {
         store.dispatch({ type: RESET_TIMELINE });
         const PATH = findPath();
         store.dispatch({ type: SET_PATH, path: PATH });
@@ -180,8 +174,38 @@ canvas.onpointermove = e => {
         else store.dispatch({ type: SWIPELEFT });
     }
 
+
 };
 
-canvas.ondblclick = e => {
-    store.dispatch({ type: TURBOBOOST });
+const slider = document.createElement('input');
+slider.style.position = 'absolute';
+slider.style.top = WINDOW_HEIGHT - CELL_WIDTH/2 + 'px';
+slider.style.width = WINDOW_WIDTH + 'px';
+slider.setAttribute('type', 'range');
+slider.setAttribute('min', 0);
+slider.setAttribute('max', HISTORY_LENGTH);
+slider.value = 0;
+slider.setAttribute('step', 1);
+
+slider.oninput = (e) => {
+    store.dispatch({ type: SET_INDEX, index: e.target.value });
+}
+
+
+let clicks = 0;
+canvas.onclick = () => {
+    clicks++;
+    if (clicks == 1) {
+      setTimeout(function(){
+        if(clicks == 1) {
+            store.dispatch({ type: PAUSE });
+            slider.value = 0;
+            container.appendChild(slider);
+        } else {
+            store.dispatch({ type: TURBOBOOST });
+        }
+        clicks = 0;
+      }, 300);
+
+    }
 }

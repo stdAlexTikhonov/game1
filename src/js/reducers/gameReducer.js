@@ -47,7 +47,7 @@ const gameReducer = (state = initGame, action) => {
         case SET_INDEX:
             return {
                 ...state,
-                index: state.index + action.index
+                index: action.index
             }
         case RESET_TIMELINE:
             return {
