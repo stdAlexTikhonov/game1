@@ -1,4 +1,4 @@
-const initHunter = {
+const initHunter3 = {
     x: 9,
     y: 8,
     path: [],
@@ -7,7 +7,7 @@ const initHunter = {
     passedCells: []
 };
 
-const hunterReducer3 = (state = initHunter, action) => {
+const hunterReducer3 = (state = initHunter3, action) => {
     switch(action.type) {
         case SET_PATH3:
             return {
