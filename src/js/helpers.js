@@ -132,6 +132,18 @@ function isPlayerHere() {
     } else return false;
 }
 
+function isPlayerHere2() {
+    const { player, hunter2 } = store.getState();
+    const sameX = player.x === hunter2.x;
+    const sameY =  player.y === hunter2.y;
+
+    if (sameX) {
+        return { y: player.y, x: player.x }
+    } else if (sameY) {
+        return { y: player.y, x: player.x }
+    } else return false;
+}
+
 function findFreeCell() {
     const { hunter, player } = store.getState();
     const IPH = isPlayerHere();
@@ -145,6 +157,23 @@ function findFreeCell() {
             }
         }
         x = 1;
+    }
+    return { y: player.y, x: player.x }
+}
+
+function findFreeCell2() {
+    const { hunter2, player } = store.getState();
+    const IPH = isPlayerHere2();
+    if (IPH) return IPH
+            
+    let x = MAP_[0].length - 2, y = MAP_.length - 2;
+    for(; y > 1; y--) {
+        for (; x > 1; x--) {
+            if (MAP_[y][x] === 1 && !hunter2.passedCells.includes(y + '' + x)) {
+                return { y, x };
+            }
+        }
+        x = MAP_[0].length - 2;
     }
     return { y: player.y, x: player.x }
 }
@@ -171,6 +200,29 @@ const findPath = () => {
         }
     });
 }
+
+const findPath2 = () => {
+    const { hunter2: hunter } = store.getState();
+    const FSTART = FINDING_GRAPH.grid[hunter.y][hunter.x];
+    const { y, x } = findFreeCell2();
+    const FEND = FINDING_GRAPH.grid[y][x];
+    const PATH = astar.search(FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
+    
+    return PATH.map((item,i) => {
+        if (i === 0) {
+            if (item.x > hunter.x) return RIGHT;
+            else if (item.x < hunter.x) return LEFT;
+            else if (item.y > hunter.y) return DOWN;
+            else if (item.y < hunter.y) return UP;
+        } else {
+            if (item.x > PATH[i-1].x) return RIGHT;
+            else if (item.x < PATH[i-1].x) return LEFT;
+            else if (item.y > PATH[i-1].y) return DOWN;
+            else if (item.y < PATH[i-1].y) return UP;
+        }
+    });
+}
+
 
 const drawHunter = () => {
     const { hunter: hunter1, player } = store.getState();
@@ -207,9 +259,52 @@ const drawHunter = () => {
         
     }
 
-
     context.beginPath();
     context.fillStyle = HUNTER_COLOR;
+    context.rect(X, Y, CELL_WIDTH, CELL_WIDTH);
+    context.fill();
+    context.closePath();
+
+}
+
+const drawHunter2 = () => {
+    const { hunter2: hunter1, player } = store.getState();
+    
+    if (!hunter1.currentStep) {
+        if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
+        const PATH = findPath2();
+        store.dispatch({type: SET_PATH2, path: PATH});
+        store.dispatch({type: SET_HUNTER_DIRECTION2});
+    }
+
+    const { hunter2: hunter, game } = store.getState();
+    
+    let X = hunter.x * CELL_WIDTH;
+    let Y = hunter.y * CELL_WIDTH;
+
+    if (!game.pause) {
+        const {x, y} = hunter.currentStep ? setHunterPosition(X,Y, hunter.currentStep, game.timer) : { x: X, y: Y};
+
+        X = x;
+        Y = y;
+        store.dispatch({ type: SAVE_HUNTER2, x, y});
+       
+    } else {
+        if (game.index < hunter.history.length) {
+            const { x: x1, y: y1 } = hunter.history[game.index];
+            const x = x1 / CELL_WIDTH;
+            const y = y1 / CELL_WIDTH;
+            if (Number.isInteger(x) && Number.isInteger(y)) store.dispatch({ type: SET_HUNTER_POSITION_FROM_HISTORY2, x, y})
+            
+            X = x1;
+            Y = y1;
+        }
+        
+    }
+
+
+    context.beginPath();
+    context.fillStyle = HUNTER_COLOR2;
     context.rect(X, Y, CELL_WIDTH, CELL_WIDTH);
     context.fill();
     context.closePath();

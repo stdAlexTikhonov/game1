@@ -12,7 +12,9 @@ const main = () => {
                     store.dispatch({type: SET_HUNTER_POSITION});
                     store.dispatch({type: SET_HUNTER_DIRECTION});
                     store.dispatch({type: SET_PLAYER_POSITION}); 
-                    store.dispatch({type: SET_PLAYER_DIRECTION}); 
+                    store.dispatch({type: SET_PLAYER_DIRECTION});
+                    store.dispatch({type: SET_HUNTER_POSITION2});
+                    store.dispatch({type: SET_HUNTER_DIRECTION2});
                 } 
   
             }
@@ -22,6 +24,7 @@ const main = () => {
             drawMap();
             drawPlayer();
             drawHunter();
+            drawHunter2();
             showPoints();
 
         } else {
