@@ -3,7 +3,8 @@ const initHunter = {
     y: 7,
     path: [],
     history: [],
-    currentStep: null
+    currentStep: null,
+    passedCells: []
 };
 
 const hunterReducer = (state = initHunter, action) => {
@@ -32,11 +33,12 @@ const hunterReducer = (state = initHunter, action) => {
         case SET_HUNTER_POSITION: {
             let {x, y, currentStep} = state;
             const { x: xnew, y: ynew } = currentStep ? setHunterPosition(x,y,currentStep) : {x, y};
-        
+            
             return {
                 ...state,
                 x: xnew,
-                y: ynew
+                y: ynew,
+                passedCells: state.passedCells.includes(`${ynew + '' + xnew}`) ? state.passedCells : state.passedCells.concat([`${ynew + '' + xnew}`]),
             }
         }
         case SAVE_HUNTER: {

@@ -120,11 +120,41 @@ const drawPlayer = () => {
     }
 }
 
+function isPlayerHere() {
+    const { player, hunter } = store.getState();
+    const sameX = player.x === hunter.x;
+    const sameY =  player.y === hunter.y;
+
+    if (sameX) {
+        return { y: player.y, x: player.x }
+    } else if (sameY) {
+        return { y: player.y, x: player.x }
+    } else return false;
+}
+
+function findFreeCell() {
+    const { hunter, player } = store.getState();
+    const IPH = isPlayerHere();
+    if (IPH) return IPH
+            
+    let x = 1, y = 1;
+    for(; y < MAP_.length - 1; y++) {
+        for (; x < MAP_[0].length - 1; x++) {
+            if (MAP_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
+                return { y, x };
+            }
+        }
+        x = 1;
+    }
+    return { y: player.y, x: player.x }
+}
+
 
 const findPath = () => {
-    const { hunter, player } = store.getState();
+    const { hunter } = store.getState();
     const FSTART = FINDING_GRAPH.grid[hunter.y][hunter.x];
-    const FEND = FINDING_GRAPH.grid[player.y][player.x];
+    const { y, x } = findFreeCell();
+    const FEND = FINDING_GRAPH.grid[y][x];
     const PATH = astar.search(FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
     
     return PATH.map((item,i) => {
