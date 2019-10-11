@@ -60,11 +60,6 @@ const  playerReducer = (state = initPlayer, action) => {
                 direction: lastUserDirection,
             }
         }
-        case REVERSE_HISTORY:
-            return {
-                ...state,
-                history: state.history.reverse()
-            }
         case RESET_DIRECTION:
             return {
                 ...state,

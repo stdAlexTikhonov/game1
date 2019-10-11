@@ -19,11 +19,6 @@ const hunterReducer = (state = initHunter, action) => {
                 ...state,
                 currentStep: state.path.shift() 
             }
-        case REVERSE_HISTORY:
-            return {
-                ...state,
-                history: state.history.reverse()
-            }
         case SET_HUNTER_POSITION_FROM_HISTORY: 
             return {
                 ...state,
