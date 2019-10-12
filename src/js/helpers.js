@@ -120,8 +120,8 @@ const drawPlayer = () => {
     }
 }
 
-function isPlayerHere() {
-    const { player, hunter } = store.getState();
+function isPlayerHere(hunter) {
+    const { player } = store.getState();
     const sameX = player.x === hunter.x;
     const sameY =  player.y === hunter.y;
 
@@ -132,33 +132,9 @@ function isPlayerHere() {
     } else return false;
 }
 
-function isPlayerHere2() {
-    const { player, hunter2 } = store.getState();
-    const sameX = player.x === hunter2.x;
-    const sameY =  player.y === hunter2.y;
-
-    if (sameX) {
-        return { y: player.y, x: player.x }
-    } else if (sameY) {
-        return { y: player.y, x: player.x }
-    } else return false;
-}
-
-function isPlayerHere3() {
-    const { player, hunter3 } = store.getState();
-    const sameX = player.x === hunter3.x;
-    const sameY =  player.y === hunter3.y;
-
-    if (sameX) {
-        return { y: player.y, x: player.x }
-    } else if (sameY) {
-        return { y: player.y, x: player.x }
-    } else return false;
-}
-
 function findFreeCell() {
     const { hunter, player } = store.getState();
-    const IPH = isPlayerHere();
+    const IPH = isPlayerHere(hunter);
     if (IPH) return IPH
             
     let x = 1, y = 1;
@@ -175,7 +151,7 @@ function findFreeCell() {
 
 function findFreeCell2() {
     const { hunter2, player } = store.getState();
-    const IPH = isPlayerHere2();
+    const IPH = isPlayerHere(hunter2);
     if (IPH) return IPH
             
     let x = MAP_[0].length - 2, y = MAP_.length - 2;
@@ -192,7 +168,7 @@ function findFreeCell2() {
 
 function findFreeCell3() {
     const { hunter3, player } = store.getState();
-    const IPH = isPlayerHere3();
+    const IPH = isPlayerHere(hunter3);
     if (IPH) return IPH
             
     let x = MAP_[0].length - 2, y = 1;
