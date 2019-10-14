@@ -132,20 +132,44 @@ function isPlayerHere(hunter) {
     } else return false;
 }
 
-function findFreeCell() {
-    const { hunter, player } = store.getState();
+const flag = (gather, param, stop, start) => {
+    return gather ? param < stop : param > start - 1
+}
+
+function findFreeCell(type, hunter) {
+    const { player } = store.getState();
     const IPH = isPlayerHere(hunter);
     if (IPH) return IPH
             
-    let x = 1, y = 1;
-    for(; y < MAP_.length - 1; y++) {
-        for (; x < MAP_[0].length - 1; x++) {
-            if (MAP_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
-                return { y, x };
+    switch(type) {
+        case 0:
+            const startX = 1, startY = 1;
+            const stopX = MAP_[0].length - 1, stopY = MAP_.length - 1;
+            for(let y = startY; y < stopY; y++) {
+                for (let x = startX; x < stopX; x++) {
+                    if (MAP_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
+                        return { y, x };
+                    }
+                }
             }
-        }
-        x = 1;
+        case 1:
+            for(let y = MAP_.length - 2; y > 1; y--) {
+                for (let x = MAP_[0].length - 2; x > 1; x--) {
+                    if (MAP_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
+                        return { y, x };
+                    }
+                }
+            } 
+        case 2:
+            for (let x = MAP_[0].length - 2; x > 1; x--) {
+                for(let y = 1; y < MAP_.length - 1; y++) {
+                    if (MAP_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
+                        return { y, x };
+                    }
+                }
+            }
     }
+
     return { y: player.y, x: player.x }
 }
 
@@ -187,7 +211,7 @@ function findFreeCell3() {
 const findPath = () => {
     const { hunter } = store.getState();
     const FSTART = FINDING_GRAPH.grid[hunter.y][hunter.x];
-    const { y, x } = findFreeCell();
+    const { y, x } = findFreeCell(0, hunter);
     const FEND = FINDING_GRAPH.grid[y][x];
     const PATH = astar.search(FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
     
@@ -209,7 +233,7 @@ const findPath = () => {
 const findPath2 = () => {
     const { hunter2: hunter } = store.getState();
     const FSTART = FINDING_GRAPH.grid[hunter.y][hunter.x];
-    const { y, x } = findFreeCell2();
+    const { y, x } = findFreeCell(1, hunter);
     const FEND = FINDING_GRAPH.grid[y][x];
     const PATH = astar.search(FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
     
@@ -231,7 +255,7 @@ const findPath2 = () => {
 const findPath3 = () => {
     const { hunter3: hunter } = store.getState();
     const FSTART = FINDING_GRAPH.grid[hunter.y][hunter.x];
-    const { y, x } = findFreeCell3();
+    const { y, x } = findFreeCell(2, hunter);
     const FEND = FINDING_GRAPH.grid[y][x];
     const PATH = astar.search(FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
     
