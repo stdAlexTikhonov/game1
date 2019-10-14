@@ -132,10 +132,6 @@ function isPlayerHere(hunter) {
     } else return false;
 }
 
-const flag = (gather, param, stop, start) => {
-    return gather ? param < stop : param > start - 1
-}
-
 function findFreeCell(type, hunter) {
     const { player } = store.getState();
     const IPH = isPlayerHere(hunter);
@@ -173,45 +169,9 @@ function findFreeCell(type, hunter) {
     return { y: player.y, x: player.x }
 }
 
-function findFreeCell2() {
-    const { hunter2, player } = store.getState();
-    const IPH = isPlayerHere(hunter2);
-    if (IPH) return IPH
-            
-    let x = MAP_[0].length - 2, y = MAP_.length - 2;
-    for(; y > 1; y--) {
-        for (; x > 1; x--) {
-            if (MAP_[y][x] === 1 && !hunter2.passedCells.includes(y + '' + x)) {
-                return { y, x };
-            }
-        }
-        x = MAP_[0].length - 2;
-    }
-    return { y: player.y, x: player.x }
-}
-
-function findFreeCell3() {
-    const { hunter3, player } = store.getState();
-    const IPH = isPlayerHere(hunter3);
-    if (IPH) return IPH
-            
-    let x = MAP_[0].length - 2, y = 1;
-    for (; x > 1; x--) {
-        for(; y < MAP_.length - 1; y++) {
-            if (MAP_[y][x] === 1 && !hunter3.passedCells.includes(y + '' + x)) {
-                return { y, x };
-            }
-        }
-        y = 1;
-    }
-    return { y: player.y, x: player.x }
-}
-
-
-const findPath = () => {
-    const { hunter } = store.getState();
+const findPath = (type, hunter) => {
     const FSTART = FINDING_GRAPH.grid[hunter.y][hunter.x];
-    const { y, x } = findFreeCell(0, hunter);
+    const { y, x } = findFreeCell(type, hunter);
     const FEND = FINDING_GRAPH.grid[y][x];
     const PATH = astar.search(FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
     
@@ -229,58 +189,13 @@ const findPath = () => {
         }
     });
 }
-
-const findPath2 = () => {
-    const { hunter2: hunter } = store.getState();
-    const FSTART = FINDING_GRAPH.grid[hunter.y][hunter.x];
-    const { y, x } = findFreeCell(1, hunter);
-    const FEND = FINDING_GRAPH.grid[y][x];
-    const PATH = astar.search(FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
-    
-    return PATH.map((item,i) => {
-        if (i === 0) {
-            if (item.x > hunter.x) return RIGHT;
-            else if (item.x < hunter.x) return LEFT;
-            else if (item.y > hunter.y) return DOWN;
-            else if (item.y < hunter.y) return UP;
-        } else {
-            if (item.x > PATH[i-1].x) return RIGHT;
-            else if (item.x < PATH[i-1].x) return LEFT;
-            else if (item.y > PATH[i-1].y) return DOWN;
-            else if (item.y < PATH[i-1].y) return UP;
-        }
-    });
-}
-
-const findPath3 = () => {
-    const { hunter3: hunter } = store.getState();
-    const FSTART = FINDING_GRAPH.grid[hunter.y][hunter.x];
-    const { y, x } = findFreeCell(2, hunter);
-    const FEND = FINDING_GRAPH.grid[y][x];
-    const PATH = astar.search(FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
-    
-    return PATH.map((item,i) => {
-        if (i === 0) {
-            if (item.x > hunter.x) return RIGHT;
-            else if (item.x < hunter.x) return LEFT;
-            else if (item.y > hunter.y) return DOWN;
-            else if (item.y < hunter.y) return UP;
-        } else {
-            if (item.x > PATH[i-1].x) return RIGHT;
-            else if (item.x < PATH[i-1].x) return LEFT;
-            else if (item.y > PATH[i-1].y) return DOWN;
-            else if (item.y < PATH[i-1].y) return UP;
-        }
-    });
-}
-
 
 const drawHunter = () => {
     const { hunter: hunter1, player } = store.getState();
     
     if (!hunter1.currentStep) {
         if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
-        const PATH = findPath();
+        const PATH = findPath(0, hunter1);
         store.dispatch({type: SET_PATH, path: PATH});
         store.dispatch({type: SET_HUNTER_DIRECTION});
     }
@@ -323,7 +238,7 @@ const drawHunter2 = () => {
     
     if (!hunter1.currentStep) {
         if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
-        const PATH = findPath2();
+        const PATH = findPath(1, hunter1);
         store.dispatch({type: SET_PATH2, path: PATH});
         store.dispatch({type: SET_HUNTER_DIRECTION2});
     }
@@ -367,7 +282,7 @@ const drawHunter3 = () => {
     
     if (!hunter1.currentStep) {
         if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
-        const PATH = findPath3();
+        const PATH = findPath(2, hunter1);
         store.dispatch({type: SET_PATH3, path: PATH});
         store.dispatch({type: SET_HUNTER_DIRECTION3});
     }
