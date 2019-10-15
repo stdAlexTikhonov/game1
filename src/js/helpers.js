@@ -39,6 +39,30 @@ const setHunterPosition = (x,y,direction, value = 1) => {
     }
 }
 
+const getDistances = () => {
+    const { player, hunter, hunter2, hunter3 } = store.getState();
+
+    //hunter1 + player
+    const aph = Math.pow(player.x - hunter.x, 2);
+    const bph = Math.pow(player.y - hunter.y, 2);
+    const ph = Math.sqrt(aph + bph);
+    const phSame = player.x === hunter.x || player.y === hunter.y;
+
+    //hunter2 + player
+    const aph2 = Math.pow(player.x - hunter2.x, 2);
+    const bph2 = Math.pow(player.y - hunter2.y, 2);
+    const ph2 = Math.sqrt(aph2 + bph2);
+    const ph2Same = player.x === hunter2.x || player.y === hunter2.y;
+
+    //hunter3 + player
+    const aph3 = Math.pow(player.x - hunter3.x, 2);
+    const bph3 = Math.pow(player.y - hunter3.y, 2);
+    const ph3 = Math.sqrt(aph3 + bph3);
+    const ph3Same = player.x === hunter3.x || player.y === hunter3.y;
+
+    if (phSame && ph < 2 || ph2Same && ph2 < 2 || ph3Same && ph3 < 2) store.dispatch({ type: STOP});
+}
+
 const setPlayerPosition = () => {
     const { player } = store.getState();
     const { x, y, direction, isTurboActive } = player;
@@ -211,7 +235,6 @@ const drawHunter = () => {
     const { hunter: hunter1, player } = store.getState();
     
     if (!hunter1.currentStep) {
-        if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
         const PATH = findPath(0, hunter1);
         store.dispatch({type: SET_PATH, path: PATH});
         store.dispatch({type: SET_HUNTER_DIRECTION});
@@ -254,7 +277,6 @@ const drawHunter2 = () => {
     const { hunter2: hunter1, player } = store.getState();
     
     if (!hunter1.currentStep) {
-        if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
         const PATH = findPath(1, hunter1);
         store.dispatch({type: SET_PATH2, path: PATH});
         store.dispatch({type: SET_HUNTER_DIRECTION2});
@@ -298,7 +320,6 @@ const drawHunter3 = () => {
     const { hunter3: hunter1, player } = store.getState();
     
     if (!hunter1.currentStep) {
-        if (hunter1.x === player.x && hunter1.y === player.y) store.dispatch({type: STOP});
         const PATH = findPath(2, hunter1);
         store.dispatch({type: SET_PATH3, path: PATH});
         store.dispatch({type: SET_HUNTER_DIRECTION3});
