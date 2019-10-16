@@ -29,6 +29,7 @@ const main = () => {
             drawHunter2();
             drawHunter3();
             showPoints();
+            getDistances();
 
         } else {
             container.appendChild(block);
