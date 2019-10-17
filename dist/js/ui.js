@@ -46,6 +46,7 @@ var canvas = document.createElement('canvas');
 canvas.style.margin = 'auto';
 canvas.width = WINDOW_WIDTH;
 canvas.height = WINDOW_HEIGHT;
+canvas.style.transform = 'rotate(90deg)';
 container.appendChild(canvas); //score block
 
 var score = document.createElement('div');
