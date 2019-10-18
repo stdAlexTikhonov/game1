@@ -4,7 +4,8 @@ const initHunter3 = {
     path: [],
     history: [],
     currentStep: null,
-    passedCells: []
+    passedCells: [],
+    alive: true
 };
 
 const hunterReducer3 = (state = initHunter3, action) => {
@@ -44,6 +45,13 @@ const hunterReducer3 = (state = initHunter3, action) => {
                 history: history.slice(0,HISTORY_LENGTH)
             }
         }
+        case KILL_HUNTER3:
+                return {
+                    ...state,
+                    alive: false,
+                    x: -1,
+                    y: -1
+                }
         default:
             return state;
     }
