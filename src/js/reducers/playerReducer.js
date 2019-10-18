@@ -8,7 +8,8 @@ const initPlayer = {
     turboscores: 10,
     isTurboActive: false,
     foodMap: ['11'],
-    history: []
+    history: [],
+    killer: false
 };
 
 const  playerReducer = (state = initPlayer, action) => {
@@ -77,12 +78,18 @@ const  playerReducer = (state = initPlayer, action) => {
         case TURBOBOOST:
             return {
                 ...state,
-                isTurboActive: true
+                isTurboActive: true,
+                killer: true
             }
         case SLOWDOWN:
             return {
                 ...state,
                 isTurboActive: false
+            }
+        case STOP_KILLER:
+            return {
+                ...state,
+                killer: false
             }
         default:
             return state;

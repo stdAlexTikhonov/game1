@@ -2,21 +2,21 @@ let frames = 0;
 
 const main = () => {
     if (frames % FPS === 0) {
-        const { game } = store.getState();
+        const { game, hunter, hunter2, hunter3 } = store.getState();
         const { process, pause } = game;
 
         if (process) {
             if (!pause) {
                 
                 if (game.timer === 0) {
-                    store.dispatch({type: SET_HUNTER_POSITION});
-                    store.dispatch({type: SET_HUNTER_DIRECTION});
+                    hunter.alive && store.dispatch({type: SET_HUNTER_POSITION});
+                    hunter.alive && store.dispatch({type: SET_HUNTER_DIRECTION});
                     store.dispatch({type: SET_PLAYER_POSITION}); 
                     store.dispatch({type: SET_PLAYER_DIRECTION});
-                    store.dispatch({type: SET_HUNTER_POSITION2});
-                    store.dispatch({type: SET_HUNTER_DIRECTION2});
-                    store.dispatch({type: SET_HUNTER_POSITION3});
-                    store.dispatch({type: SET_HUNTER_DIRECTION3});
+                    hunter2.alive && store.dispatch({type: SET_HUNTER_POSITION2});
+                    hunter2.alive && store.dispatch({type: SET_HUNTER_DIRECTION2});
+                    hunter3.alive && store.dispatch({type: SET_HUNTER_POSITION3});
+                    hunter3.alive && store.dispatch({type: SET_HUNTER_DIRECTION3});
                 } 
   
             }
@@ -25,9 +25,9 @@ const main = () => {
             clearWindow();
             drawMap();
             drawPlayer();
-            drawHunter();
-            drawHunter2();
-            drawHunter3();
+            hunter.alive && drawHunter();
+            hunter2.alive && drawHunter2();
+            hunter3.alive && drawHunter3();
             showPoints();
             getDistances();
 

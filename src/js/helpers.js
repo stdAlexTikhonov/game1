@@ -60,7 +60,12 @@ const getDistances = () => {
     const ph3 = Math.sqrt(aph3 + bph3);
     const ph3Same = player.x === hunter3.x || player.y === hunter3.y;
 
-    if (phSame && ph < 2 || ph2Same && ph2 < 2 || ph3Same && ph3 < 2) store.dispatch({ type: STOP});
+    const flag = phSame && ph < 2 || ph2Same && ph2 < 2 || ph3Same && ph3 < 2;
+
+    if (player.killer && phSame && ph < 2) store.dispatch({ type: KILL_HUNTER});
+    else if (player.killer && ph2Same && ph2 < 2) store.dispatch({ type: KILL_HUNTER2});
+    else if (player.killer && ph3Same && ph3 < 2) store.dispatch({ type: KILL_HUNTER3});
+    else if (flag) store.dispatch({ type: STOP});
 }
 
 const setPlayerPosition = () => {
@@ -156,7 +161,9 @@ const drawPlayer = () => {
             store.dispatch({type: SET_PLAYER_DIRECTION}); 
             drawPlayer();
             turboscores--;
+            getDistances();
         }
+        store.dispatch({ type: STOP_KILLER});
         
     }
 }
