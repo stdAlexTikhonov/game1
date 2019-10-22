@@ -1,28 +1,31 @@
 {
-  "name": "game1",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "game",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-scripts": "3.2.0"
+  },
   "scripts": {
-    "build": "babel src -d dist"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stdAlexTikhonov/game1.git"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/stdAlexTikhonov/game1/issues"
-  },
-  "homepage": "https://github.com/stdAlexTikhonov/game1#readme",
-  "devDependencies": {
-    "@babel/cli": "^7.6.0",
-    "@babel/core": "^7.6.0",
-    "@babel/node": "^7.6.1",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-    "@babel/polyfill": "^7.6.0",
-    "@babel/preset-env": "^7.6.0"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
