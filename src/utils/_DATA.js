@@ -1,4 +1,4 @@
-let users = {
+const users = {
     sarah_edo: {
       id: "sarah_edo",
       name: "Sarah Drasner",
@@ -19,15 +19,59 @@ let users = {
     }
   }
   
-  let initState = {
+  const initGame = {
     "8xf0y6ziyjabvozdd253nd": {
-      id: "8xf0y6ziyjabvozdd253nd",
-      text: "Shoutout to all the speakers I know for whom English is not a first language, but can STILL explain a concept well. It's hard enough to give a good talk in your mother tongue!",
-      author: "sarah_edo",
-      timestamp: 1518122597860,
-      likes: ['tylermcginnis'],
-      replies: ['fap8sdxppna8oabnxljzcv', '3km0v4hf1ps92ajf4z2ytg'],
-      replyingTo: null,
+      pause: false,
+      process: false,
+      timer: 0,
+      direction: null,
+      index: 0
+    }
+  }
+
+  const initHunter = {
+    "8xf0y6ziyjabvozdd253nd": {
+      x: 7,
+      y: 7,
+      path: [],
+      history: [],
+      currentStep: null,
+      passedCells: [],
+      alive: true
+    },
+    "8xf0y6ziyjabvozdd253n2": {
+      x: 7,
+      y: 7,
+      path: [],
+      history: [],
+      currentStep: null,
+      passedCells: [],
+      alive: true
+    },
+    "8xf0y6ziyjabvozdd253n3": {
+      x: 7,
+      y: 7,
+      path: [],
+      history: [],
+      currentStep: null,
+      passedCells: [],
+      alive: true
+    }
+  }
+
+  const initPlayer = {
+    "8xf0y6ziyjabvozdd253nd": {
+      x: 1, 
+      y: 1, 
+      direction: null, 
+      lastUserDirection: null,
+      previousDirection: null,
+      points: 0,
+      turboscores: 10,
+      isTurboActive: false,
+      foodMap: ['11'],
+      history: [],
+      killer: false
     }
   }
   
@@ -37,11 +81,24 @@ let users = {
     })
   }
   
-  export function _getInitState () {
+  export function _getInitGame () {
     return new Promise((res, rej) => {
-      setTimeout(() => res({...initState}), 1000)
+      setTimeout(() => res({...initGame}), 1000)
     })
   }
+
+  export function _getInitHunter () {
+    return new Promise((res, rej) => {
+      setTimeout(() => res({...initHunter}), 1000)
+    })
+  }
+
+  export function _getInitPlayer () {
+    return new Promise((res, rej) => {
+      setTimeout(() => res({...initPlayer}), 1000)
+    })
+  }
+  
   
   
   function generateUID () {
@@ -61,28 +118,5 @@ let users = {
   }
   
   export function _saveGame ({ text, author, replyingTo }) {
-    return new Promise((res, rej) => {
-      const formatted = format({
-        text,
-        author,
-        replyingTo
-      })
-  
-      setTimeout(() => {
-        tweets = {
-          ...tweets,
-          [formatted.id]: formatted,
-        }
-  
-        users = {
-          ...users,
-          [author]: {
-            ...users[author],
-            tweets: users[author].tweets.concat([formatted.id])
-          }
-        }
-  
-        res(formatted)
-      }, 1000)
-    })
+   
   }

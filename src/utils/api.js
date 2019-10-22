@@ -1,16 +1,22 @@
 import {
     _getUsers,
-    _getInitState,
+    _getInitGame,
     _saveGame,
+    _getInitHunter,
+    _getInitPlayer
   } from './_DATA.js'
   
   export function getInitialData () {
     return Promise.all([
       _getUsers(),
-      _getInitState(),
-    ]).then(([users, game]) => ({
+      _getInitGame(),
+      _getInitHunter(),
+      _getInitPlayer()
+    ]).then(([users, game, hunter, player]) => ({
       users,
       game,
+      hunter,
+      player
     }))
   }
   
