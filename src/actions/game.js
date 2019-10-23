@@ -1,13 +1,9 @@
 export const RECEIVE_GAME_DATA = "RECEIVE_GAME_DATA";
 export const SAVE = 'SAVE';
 export const START = 'START';
-export const RESET = 'RESET';
 export const STOP = 'STOP';
 export const SET_TIMER = 'SET_TIMER';
 export const PAUSE = 'PAUSE';
-export const SWIPE_TIME_LEFT = 'SWIPE_TIME_LEFT';
-export const SWIPE_TIME_RIGHT = 'SWIPE_TIME_RIGHT';
-export const PAUSE_TIME = 'PAUSE_TIME';
 export const SET_INDEX = 'SET_INDEX';
 export const RESET_TIMELINE = 'RESRT_TIMELINE';
 
@@ -18,44 +14,47 @@ export function receiveGameData(game) {
     }
 }
 
-export function save(game) {
+export function save(x,y) {
     return {
         type: SAVE,
-        game
+        x,
+        y
     }
 }
 
-export function start(game) {
+export function start() {
     return {
         type: START,
-        game
     }
 }
 
-export function reset(game) {
-    return {
-        type: RESET,
-        game
-    }
-}
-
-export function stop(game) {
+export function stop() {
     return {
         type: STOP,
-        game
     }
 }
 
-export function setTimer(game) {
+export function setTimer() {
     return {
         type: SET_TIMER,
-        game
     }
 }
 
-export function pause(game) {
+export function pause() {
     return {
         type: PAUSE,
-        game
+    }
+}
+
+export function setIndex(index) {
+    return {
+        type: SET_INDEX,
+        index
+    }
+}
+
+export function resetTimeline() {
+    return {
+        type: RESET_TIMELINE,
     }
 }
