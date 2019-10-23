@@ -6,7 +6,8 @@ import {
     SET_TIMER,
     PAUSE,
     RESET_TIMELINE
-} from '../actions/game';
+} from '../actions/game'
+import { CELL_WIDTH, STEP } from '../utils/constants'
 
 export default function game (state = {}, action) {
     switch (action.type) {
