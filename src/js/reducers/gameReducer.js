@@ -29,21 +29,6 @@ const gameReducer = (state = initGame, action) => {
                 ...state,
                 pause: true
             }
-        case SWIPE_TIME_LEFT:
-            return {
-                ...state,
-                direction: LEFT
-            }
-        case SWIPE_TIME_RIGHT:
-            return {
-                ...state,
-                direction: RIGHT
-            }
-        case PAUSE_TIME:
-            return {
-                ...state,
-                direction: null
-            }
         case SET_INDEX:
             return {
                 ...state,
