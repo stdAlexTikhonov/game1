@@ -1,4 +1,12 @@
-import { RECEIVE_GAME_DATA } from '../actions/game';
+import { 
+    RECEIVE_GAME_DATA,
+    START,
+    STOP,
+    SET_INDEX,
+    SET_TIMER,
+    PAUSE,
+    RESET_TIMELINE
+} from '../actions/game';
 
 export default function game (state = {}, action) {
     switch (action.type) {
@@ -27,21 +35,6 @@ export default function game (state = {}, action) {
                 return {
                     ...state,
                     pause: true
-                }
-            case SWIPE_TIME_LEFT:
-                return {
-                    ...state,
-                    direction: LEFT
-                }
-            case SWIPE_TIME_RIGHT:
-                return {
-                    ...state,
-                    direction: RIGHT
-                }
-            case PAUSE_TIME:
-                return {
-                    ...state,
-                    direction: null
                 }
             case SET_INDEX:
                 return {
