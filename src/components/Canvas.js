@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { FPS, CELL_WIDTH, WALL_COLOR, WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND, MAP_ } from '../utils/constants'
 
 const height = window.innerHeight,
@@ -24,8 +25,8 @@ class Canvas extends Component {
         MAP_.forEach((item,i) => {
           item.forEach((elem,j) => {
             if (elem === 0) { 
-                context.fillStyle = WALL_COLOR;
-                context.fillRect(CELL_WIDTH*j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
+                ctx.fillStyle = WALL_COLOR;
+                ctx.fillRect(CELL_WIDTH*j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
             } 
             // else {
             //     if (!player.foodMap.includes(`${i + '' + j}`)) {
@@ -66,24 +67,27 @@ class Canvas extends Component {
         this.frameId = window.requestAnimationFrame(this.animate)
         this.frame++;
 
-        if (frames % FPS === 0) {
+        if (this.frame % FPS === 0) {
             this.clearWindow();
             this.drawMap();
         }
-        if (this.frame > 100) this.stop();
     }
 
     render() {
-
+        console.log(this.props)
 
         return (
             <div style={{
                 height: '100vh',
                 width: '100%',
                 background: 'red'
-            }}><canvas ref="canvas" width={width} height={height} /></div>
+            }}><canvas ref="canvas" width={WINDOW_WIDTH} height={WINDOW_HEIGHT} style={{ width: '100%', height: '100vh'}} /></div>
         );
     }
 }
 
-export default Canvas
+function mapStateToProps (state) {
+    return state
+}
+
+export default connect(mapStateToProps)(Canvas)
