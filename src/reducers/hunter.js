@@ -20,44 +20,64 @@ export default function users (state = {}, action) {
             case SET_PATH:
                 return {
                     ...state,
-                    path: action.path
+                    [`${action.index}`]: {
+                        ...state[`${action.index}`],
+                        path: action.path
+                    }
                 }
             case SET_HUNTER_DIRECTION: 
                 return {
                     ...state,
-                    currentStep: state.path.shift() 
+                    [`${action.index}`]: {
+                        ...state[`${action.index}`],
+                        currentStep: state[`${action.index}`].path.shift() 
+                    }
                 }
             case SET_HUNTER_POSITION_FROM_HISTORY: 
                 return {
                     ...state,
-                    x: action.x,
-                    y: action.y
+                    [`${action.index}`]: {
+                        ...state[`${action.index}`],
+                        x: action.x,
+                        y: action.y
+                    }
                 }
             case SET_HUNTER_POSITION: {
-                let {x, y, currentStep} = state;
+                let {x, y, currentStep} = state[action.index];
                 const { x: xnew, y: ynew } = currentStep ? setHunterPosition(x,y,currentStep) : {x, y};
                 
                 return {
                     ...state,
-                    x: xnew,
-                    y: ynew,
-                    passedCells: state.passedCells.includes(`${ynew + '' + xnew}`) ? state.passedCells : state.passedCells.concat([`${ynew + '' + xnew}`]),
+                    [`${action.index}`]: {
+                        ...state[`${action.index}`],
+                        x: xnew, 
+                        y: ynew,
+                        passedCells: state[action.index].passedCells.includes(`${ynew + '' + xnew}`) ? 
+                                        state[action.index].passedCells : 
+                                        state[action.index].passedCells.concat([`${ynew + '' + xnew}`]),
+                    }
                 }
             }
             case SAVE_HUNTER: {
-                const { history } = state;
+                const { history } = state[action.index];
                 history.unshift({x: action.x, y: action.y});
                 return {
                     ...state,
-                    history: history.slice(0,HISTORY_LENGTH)
+                    [`${action.index}`]: {
+                        ...state[`${action.index}`],
+                        history: history.slice(0,HISTORY_LENGTH)
+                    }
                 }
             }
             case KILL_HUNTER:
                 return {
                     ...state,
-                    alive: false,
-                    x: -1,
-                    y: -1
+                    [`${action.index}`]: {
+                        ...state[`${action.index}`],
+                        alive: false,
+                        x: -1,
+                        y: -1
+                    }
                 }
         default:
             return state;

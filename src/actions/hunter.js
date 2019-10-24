@@ -13,43 +13,49 @@ export function receiveHunter(hunter) {
     }
 }
 
-export function setPath(path) {
+export function setPath(index,path) {
     return {
         type: SET_PATH,
-        path
+        path,
+        index
     }
 }
 
-export function setHunterDirection() {
+export function setHunterDirection(index) {
     return {
         type: SET_HUNTER_DIRECTION,
+        index
     }
 }
 
-export function setHunterPosition() {
+export function setHunterPosition(index) {
     return {
         type: SET_HUNTER_POSITION,
+        index
     }
 }
 
-export function setHunterPositionFromHistory(x,y) {
+export function setHunterPositionFromHistory(x,y, index) {
     return {
         type: SET_HUNTER_POSITION_FROM_HISTORY,
         x,
-        y
+        y,
+        index
     }
 }
 
-export function saveHunter(x,y) {
+export function saveHunter(x,y, index) {
     return {
         type: SAVE_HUNTER,
         x,
-        y
+        y,
+        index
     }
 }
 
-export function killHunter() {
+export function killHunter(index) {
     return {
-        type: KILL_HUNTER
+        type: KILL_HUNTER,
+        index
     }
 }
