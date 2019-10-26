@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { FPS, CELL_WIDTH, WALL_COLOR, WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND, MAP_ } from '../utils/constants'
+import { FPS, CELL_WIDTH, WALL_COLOR, WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND, MAP_ } from './utils/constants'
+import { setTimer } from './actions/game'
 
 const height = window.innerHeight,
 width = document.body.clientWidth
@@ -70,6 +71,7 @@ class Canvas extends Component {
         if (this.frame % FPS === 0) {
             this.clearWindow();
             this.drawMap();
+            this.props.dispatch(setTimer());
         }
     }
 
