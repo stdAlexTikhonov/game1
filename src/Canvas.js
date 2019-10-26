@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { FPS, CELL_WIDTH, WALL_COLOR, WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND, MAP_ } from './utils/constants'
+import { FPS, CELL_WIDTH, WALL_COLOR, WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND } from './utils/constants'
 import { setTimer } from './actions/game'
+import { getMapSelector } from './selectors/test';
 
 const height = window.innerHeight,
 width = document.body.clientWidth
@@ -22,8 +23,9 @@ class Canvas extends Component {
     drawMap = () => {
         const ctx = this.refs.canvas.getContext('2d');
         // const { player } = store.getState();
+        const { map_ } = this.props;
     
-        MAP_.forEach((item,i) => {
+        map_.forEach((item,i) => {
           item.forEach((elem,j) => {
             if (elem === 0) { 
                 ctx.fillStyle = WALL_COLOR;
@@ -89,7 +91,9 @@ class Canvas extends Component {
 }
 
 function mapStateToProps (state) {
-    return state
+    return {
+        map_: getMapSelector(state)
+    }
 }
 
 export default connect(mapStateToProps)(Canvas)
