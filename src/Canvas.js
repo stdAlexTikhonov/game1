@@ -10,7 +10,7 @@ import {
     PLAYER_COLOR
 } from './utils/constants'
 import { setTimer, pause, start } from './actions/game'
-import { swipeUp, swipeLeft, swipeRight, swipeDown } from './actions/player'
+import { swipeUp, swipeLeft, swipeRight, swipeDown, setPlayerDirection, setPlayerPosition } from './actions/player'
 import { turboBoost } from './actions/player'
 import { 
     getMapSelector,
@@ -123,7 +123,10 @@ class Canvas extends Component {
 
         if (this.frame % FPS === 0) {
             if (!game.pause) {
-
+                if (game.timer === 0) {
+                    this.props.dispatch(setPlayerPosition());
+                    this.props.dispatch(setPlayerDirection())
+                }
             }
 
             this.clearWindow();

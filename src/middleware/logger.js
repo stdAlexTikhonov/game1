@@ -1,5 +1,6 @@
+const stopList = ['SET_TIMER', 'SET_PLAYER_POSITION', 'SET_PLAYER_DIRECTION'];
 const logger = (store) => (next) => (action) => {
-    if (action.type !== 'SET_TIMER') {
+    if (!stopList.includes(action.type)) {
         console.group(action.type);
         console.log('The action: ', action);
         const returnValue = next(action);
