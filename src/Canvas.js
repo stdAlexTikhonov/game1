@@ -8,7 +8,9 @@ import {
     WINDOW_WIDTH,
     BACKGROUND,
     PLAYER_COLOR,
-    DIRECTION_MAPPING
+    DIRECTION_MAPPING,
+    FOOD_COLOR,
+    FOOD_SIZE
 } from './utils/constants'
 import { 
     setTimer, 
@@ -61,7 +63,7 @@ class Canvas extends Component {
 
     drawMap = () => {
         const ctx = this.refs.canvas.getContext('2d');
-        // const { player } = store.getState();
+        const { player } = this.props;
         const { map_ } = this.props;
 
         map_.forEach((item, i) => {
@@ -70,15 +72,15 @@ class Canvas extends Component {
                     ctx.fillStyle = WALL_COLOR;
                     ctx.fillRect(CELL_WIDTH * j, CELL_WIDTH * i, CELL_WIDTH, CELL_WIDTH);
                 }
-                // else {
-                //     if (!player.foodMap.includes(`${i + '' + j}`)) {
-                //         context.beginPath();
-                //         context.arc(CELL_WIDTH*j + CELL_WIDTH/2, CELL_WIDTH * i + CELL_WIDTH/2, FOOD_SIZE, 0, 2 * Math.PI, false);
-                //         context.fillStyle = FOOD_COLOR;
-                //         context.fill();
-                //         context.closePath();
-                //     }
-                // }
+                else {
+                    if (!player.foodMap.includes(`${i + '' + j}`)) {
+                        ctx.beginPath();
+                        ctx.arc(CELL_WIDTH*j + CELL_WIDTH/2, CELL_WIDTH * i + CELL_WIDTH/2, FOOD_SIZE, 0, 2 * Math.PI, false);
+                        ctx.fillStyle = FOOD_COLOR;
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
             });
         });
     }
@@ -129,7 +131,7 @@ class Canvas extends Component {
             else return { X, Y }
         }
     }
-
+   
     drawPlayer = () => {
         const ctx = this.refs.canvas.getContext('2d');
         const { game, player } = this.props;

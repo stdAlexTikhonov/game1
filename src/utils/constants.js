@@ -3,6 +3,8 @@ export const STEP = 5;
 export const HISTORY_LENGTH = 100;
 export const FPS = 1;
 export const PLAYER_COLOR = 'yellow';
+export const FOOD_COLOR = 'yellow';
+export const FOOD_SIZE = CELL_WIDTH / 8;
 
 export const WINDOW_WIDTH = 950;
 export const WINDOW_HEIGHT = 750;
