@@ -49,9 +49,10 @@ export function setPlayerDirection() {
     }
 }
 
-export function setPlayerPosition() {
+export function setPlayerPosition(map_) {
     return {
-        type: SET_PLAYER_POSITION
+        type: SET_PLAYER_POSITION,
+        map_
     }
 }
 

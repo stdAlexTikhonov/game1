@@ -59,7 +59,7 @@ export default function users (state = {}, action) {
                 }
             case SET_PLAYER_POSITION: {
                 let {x, y} = state;
-                const { x: newx, y: newy} = state.direction ? setPlayerPosition() : { x, y};
+                const { x: newx, y: newy} = state.direction ? setPlayerPosition(state, action.map_) : { x, y};
                 return {
                     ...state,
                     points: state.direction && !state.foodMap.includes(`${newy + '' + newx}`) ? state.points + 1 : state.points,
