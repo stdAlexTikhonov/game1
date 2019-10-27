@@ -20,7 +20,6 @@ const users = {
   }
   
   const initGame = {
-    "8xf0y6ziyjabvozdd253nd": {
       pause: false,
       process: false,
       timer: 0,
@@ -43,7 +42,6 @@ const users = {
         [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     ]
-    }
   }
 
   const initHunter = {
@@ -77,19 +75,17 @@ const users = {
   }
 
   const initPlayer = {
-    "8xf0y6ziyjabvozdd253nd": {
-      x: 1, 
-      y: 1, 
-      direction: null, 
-      lastUserDirection: null,
-      previousDirection: null,
-      points: 0,
-      turboscores: 10,
-      isTurboActive: false,
-      foodMap: ['11'],
-      history: [],
-      killer: false
-    }
+    x: 1, 
+    y: 1, 
+    direction: null, 
+    lastUserDirection: null,
+    previousDirection: null,
+    points: 0,
+    turboscores: 10,
+    isTurboActive: false,
+    foodMap: ['11'],
+    history: [],
+    killer: false
   }
   
   export function _getUsers () {

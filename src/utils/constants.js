@@ -2,6 +2,7 @@ export const CELL_WIDTH = 50;
 export const STEP = 5;
 export const HISTORY_LENGTH = 100;
 export const FPS = 1;
+export const PLAYER_COLOR = 'yellow';
 
 export const WINDOW_WIDTH = 950;
 export const WINDOW_HEIGHT = 750;
