@@ -385,7 +385,7 @@ class Canvas extends Component {
     clickHandle = () => {
         const self = this;
         this.timer = setTimeout(function () {
-            if (!self.clicks) self.props.dispatch(pause())
+            // if (!self.clicks) self.props.dispatch(pause())
             self.clicks = false;
         }, 300);
 
