@@ -48,7 +48,8 @@ import {
     getGameSelector,
     getHunter1Selector,
     getHunter2Selector,
-    getHunter3Selector
+    getHunter3Selector,
+    getHunterSelector
 } from './selectors/test';
 import { astar, Graph } from 'astar';
 
@@ -231,7 +232,7 @@ class Canvas extends Component {
         if (IPH) return IPH
                 
         switch(type) {
-            case 0:
+            case "8xf0y6ziyjabvozdd253nd":
                 const startX = 1, startY = 1;
                 const stopX = map_[0].length - 1, stopY = map_.length - 1;
                 for(let y = startY; y < stopY; y++) {
@@ -242,7 +243,7 @@ class Canvas extends Component {
                     }
                 }
                 break;
-            case 1:
+            case "8xf0y6ziyjabvozdd253n2":
                 for(let y = map_.length - 2; y > 1; y--) {
                     for (let x = map_[0].length - 2; x > 1; x--) {
                         if (map_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
@@ -251,7 +252,7 @@ class Canvas extends Component {
                     }
                 } 
                 break;
-            case 2:
+            case "8xf0y6ziyjabvozdd253n3":
                 for (let x = map_[0].length - 2; x > 1; x--) {
                     for(let y = 1; y < map_.length - 1; y++) {
                         if (map_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
@@ -267,10 +268,10 @@ class Canvas extends Component {
         
     }
 
-    findPath = (type, hunter) => {
+    findPath = (hunterInd, hunter) => {
   
         const FSTART = this.FINDING_GRAPH.grid[hunter.y][hunter.x];
-        const { y, x } = this.findFreeCell(type, hunter);
+        const { y, x } = this.findFreeCell(hunterInd, hunter);
         const FEND = this.FINDING_GRAPH.grid[y][x];
         const PATH = astar.search(this.FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
         
@@ -289,17 +290,20 @@ class Canvas extends Component {
         });
     }
 
-    drawHunter = () => {
-        const { hunter1 } = this.props;
+    drawHunter = (hunterInd) => {
+        let { hunters } = this.props;
+        const hunter1 = hunters[hunterInd];
+
         const ctx = this.refs.canvas.getContext('2d');
 
         if (!hunter1.currentStep) {
-            const path = this.findPath(0, hunter1);
-            this.props.dispatch(setPath("8xf0y6ziyjabvozdd253nd",path));
-            this.props.dispatch(setHunterDirection("8xf0y6ziyjabvozdd253nd"));
+            const path = this.findPath(hunterInd, hunter1);
+            this.props.dispatch(setPath(hunterInd,path));
+            this.props.dispatch(setHunterDirection(hunterInd));
         }
 
-        const { hunter1: hunter, game } = this.props;
+        let { hunters: huntersCopy, game } = this.props;
+        const hunter = huntersCopy[hunterInd];
     
         let X = hunter.x * CELL_WIDTH;
         let Y = hunter.y * CELL_WIDTH;
@@ -356,7 +360,9 @@ class Canvas extends Component {
     }
 
     animate = () => {
-        const { game, map_, hunter1 } = this.props;
+        const { game, map_, hunters } = this.props;
+        const hunterIndexies = Object.keys(hunters);
+
         const { pause, process } = game;
         this.frameId = window.requestAnimationFrame(this.animate)
         this.frame++;
@@ -365,8 +371,10 @@ class Canvas extends Component {
             if (process) {
                 if (!pause) {
                     if (game.timer === 0) {
-                        hunter1.alive && this.props.dispatch(setHunterPosition("8xf0y6ziyjabvozdd253nd"));
-                        hunter1.alive && this.props.dispatch(setHunterDirection("8xf0y6ziyjabvozdd253nd"));
+                        hunterIndexies.forEach(hunterInd => {
+                            hunters[hunterInd].alive && this.props.dispatch(setHunterPosition(hunterInd));
+                            hunters[hunterInd].alive && this.props.dispatch(setHunterDirection(hunterInd));
+                        });
                         this.props.dispatch(setPlayerPosition(map_));
                         this.props.dispatch(setPlayerDirection());
                     }
@@ -375,7 +383,9 @@ class Canvas extends Component {
                 this.clearWindow();
                 this.drawMap();
                 this.drawPlayer();
-                hunter1.alive && this.drawHunter();
+                hunterIndexies.forEach(hunterInd => {
+                    hunters[hunterInd].alive && this.drawHunter(hunterInd);
+                });
                 this.props.dispatch(setTimer());
                 this.getDistances()
             }
@@ -452,6 +462,7 @@ function mapStateToProps(state) {
         hunter1: getHunter1Selector(state),
         hunter2: getHunter2Selector(state),
         hunter3: getHunter3Selector(state),
+        hunters: getHunterSelector(state),
         game: getGameSelector(state)
     }
 }

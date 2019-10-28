@@ -8,6 +8,8 @@ export const getHunter2Selector = state => state.hunter['8xf0y6ziyjabvozdd253n2'
 
 export const getHunter3Selector = state => state.hunter['8xf0y6ziyjabvozdd253n3'];
 
+export const getHunterSelector = state => state.hunter;
+
 export const getPlayerSelector = state => state.player;
 
 export const getUsersSelector = state => state.users;
