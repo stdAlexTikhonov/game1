@@ -346,7 +346,7 @@ class Canvas extends Component {
         if (!this.frameId) {
             this.frameId = requestAnimationFrame(this.animate)
         }
-
+        this.props.dispatch(start())
     }
 
     stop = () => {
@@ -357,24 +357,28 @@ class Canvas extends Component {
 
     animate = () => {
         const { game, map_, hunter1 } = this.props;
+        const { pause, process } = game;
         this.frameId = window.requestAnimationFrame(this.animate)
         this.frame++;
 
         if (this.frame % FPS === 0) {
-            if (!game.pause) {
-                if (game.timer === 0) {
-                    hunter1.alive && this.props.dispatch(setHunterPosition("8xf0y6ziyjabvozdd253nd"));
-                    hunter1.alive && this.props.dispatch(setHunterDirection("8xf0y6ziyjabvozdd253nd"));
-                    this.props.dispatch(setPlayerPosition(map_));
-                    this.props.dispatch(setPlayerDirection());
+            if (process) {
+                if (!pause) {
+                    if (game.timer === 0) {
+                        hunter1.alive && this.props.dispatch(setHunterPosition("8xf0y6ziyjabvozdd253nd"));
+                        hunter1.alive && this.props.dispatch(setHunterDirection("8xf0y6ziyjabvozdd253nd"));
+                        this.props.dispatch(setPlayerPosition(map_));
+                        this.props.dispatch(setPlayerDirection());
+                    }
                 }
+    
+                this.clearWindow();
+                this.drawMap();
+                this.drawPlayer();
+                hunter1.alive && this.drawHunter();
+                this.props.dispatch(setTimer());
+                this.getDistances()
             }
-
-            this.clearWindow();
-            this.drawMap();
-            this.drawPlayer();
-            hunter1.alive && this.drawHunter();
-            this.props.dispatch(setTimer());
         }
     }
 
@@ -399,7 +403,7 @@ class Canvas extends Component {
         this.pointerX = e.nativeEvent.offsetX;
         this.pointerY = e.nativeEvent.offsetY;
         if (game.pause) {
-            this.props.dispatch(start());
+            //this.props.dispatch(start());
             // container.removeChild(slider);
         };
     }
