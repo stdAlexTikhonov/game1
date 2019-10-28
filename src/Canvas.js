@@ -15,7 +15,8 @@ import {
 import { 
     setTimer, 
     pause, 
-    start
+    start,
+    stop
 } from './actions/game'
 import {
     swipeUp, 
@@ -26,8 +27,13 @@ import {
     setPlayerPosition,
     setCalculatedPlayerPosition,
     resetDirection,
-    turboBoost
+    turboBoost,
+    slowDown,
+    stopKiller
 } from './actions/player'
+import {
+    killHunter
+} from './actions/hunter'
 import {
     getMapSelector,
     getUserSelector,
@@ -131,10 +137,39 @@ class Canvas extends Component {
             else return { X, Y }
         }
     }
+
+    getDistances = () => {
+        const { player, hunter1, hunter2, hunter3 } = this.props;
+    
+        //hunter1 + player
+        const aph = Math.pow(player.x - hunter1.x, 2);
+        const bph = Math.pow(player.y - hunter1.y, 2);
+        const ph = Math.sqrt(aph + bph);
+        const phSame = player.x === hunter1.x || player.y === hunter1.y;
+    
+        //hunter2 + player
+        const aph2 = Math.pow(player.x - hunter2.x, 2);
+        const bph2 = Math.pow(player.y - hunter2.y, 2);
+        const ph2 = Math.sqrt(aph2 + bph2);
+        const ph2Same = player.x === hunter2.x || player.y === hunter2.y;
+    
+        //hunter3 + player
+        const aph3 = Math.pow(player.x - hunter3.x, 2);
+        const bph3 = Math.pow(player.y - hunter3.y, 2);
+        const ph3 = Math.sqrt(aph3 + bph3);
+        const ph3Same = player.x === hunter3.x || player.y === hunter3.y;
+    
+        const flag = phSame && ph < 2 || ph2Same && ph2 < 2 || ph3Same && ph3 < 2;
+    
+        if (player.killer && phSame && ph < 2) this.props.dispatch(killHunter("8xf0y6ziyjabvozdd253nd"));
+        else if (player.killer && ph2Same && ph2 < 2) this.props.dispatch(killHunter("8xf0y6ziyjabvozdd253n2"));
+        else if (player.killer && ph3Same && ph3 < 2) this.props.dispatch(killHunter("8xf0y6ziyjabvozdd253n3"));
+        else if (flag) this.props.dispatch(stop());
+    }
    
     drawPlayer = () => {
         const ctx = this.refs.canvas.getContext('2d');
-        const { game, player } = this.props;
+        const { game, player, map_ } = this.props;
         let { isTurboActive, turboscores } = player;
         const { X, Y } = this.nextPlayerMove();
         // if (!game.pause) store.dispatch({ type: SAVE, x: X, y: Y}); 
@@ -143,18 +178,18 @@ class Canvas extends Component {
         ctx.fillStyle = PLAYER_COLOR;
         ctx.fill();
         ctx.closePath();
-        // if (isTurboActive) {
-        //     store.dispatch({ type: SLOWDOWN});
-        //     while(turboscores > 0) {
-        //         store.dispatch({type: SET_PLAYER_POSITION}); 
-        //         store.dispatch({type: SET_PLAYER_DIRECTION}); 
-        //         drawPlayer();
-        //         turboscores--;
-        //         getDistances();
-        //     }
-        //     store.dispatch({ type: STOP_KILLER});
+        if (isTurboActive) {
+            this.props.dispatch(slowDown());
+            while(turboscores > 0) {
+                this.props.dispatch(setPlayerPosition(map_));
+                this.props.dispatch(setPlayerDirection()); 
+                this.drawPlayer();
+                turboscores--;
+                this.getDistances();
+            }
+            this.props.dispatch(stopKiller());
 
-        // }
+        }
     }
 
     updateCanvas() {
