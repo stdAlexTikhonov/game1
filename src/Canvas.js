@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+
 import {
     FPS,
     CELL_WIDTH,
@@ -10,7 +11,9 @@ import {
     PLAYER_COLOR,
     DIRECTION_MAPPING,
     FOOD_COLOR,
-    FOOD_SIZE
+    FOOD_SIZE,
+    HUNTER_COLOR,
+    UP, DOWN, RIGHT, LEFT
 } from './utils/constants'
 import { 
     setTimer, 
@@ -32,7 +35,10 @@ import {
     stopKiller
 } from './actions/player'
 import {
-    killHunter
+    killHunter,
+    setPath,
+    setHunterDirection,
+    setHunterPosition
 } from './actions/hunter'
 import {
     getMapSelector,
@@ -44,18 +50,22 @@ import {
     getHunter2Selector,
     getHunter3Selector
 } from './selectors/test';
+import { astar, Graph } from 'astar';
 
 const height = window.innerHeight,
     width = document.body.clientWidth
 
 class Canvas extends Component {
     componentDidMount() {
+        const { map_ } = this.props;
+
         this.frame = 0;
         this.clicks = false;
         this.timer = null;
         this.gamePause = false;
         this.pointerX = undefined;
         this.pointerY = undefined;
+        this.FINDING_GRAPH = new Graph(map_);
         this.start();
     }
 
@@ -159,7 +169,7 @@ class Canvas extends Component {
         const ph3 = Math.sqrt(aph3 + bph3);
         const ph3Same = player.x === hunter3.x || player.y === hunter3.y;
     
-        const flag = phSame && ph < 2 || ph2Same && ph2 < 2 || ph3Same && ph3 < 2;
+        const flag = (phSame && ph < 2) || (ph2Same && ph2 < 2) || (ph3Same && ph3 < 2);
     
         if (player.killer && phSame && ph < 2) this.props.dispatch(killHunter("8xf0y6ziyjabvozdd253nd"));
         else if (player.killer && ph2Same && ph2 < 2) this.props.dispatch(killHunter("8xf0y6ziyjabvozdd253n2"));
@@ -192,6 +202,137 @@ class Canvas extends Component {
         }
     }
 
+    setHunterPosition = (x,y,direction, value = 1) => {
+        const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
+        const isX = axis === 'x';
+        const isY = axis === 'y';
+    
+        return {
+            x: isX ? x + direction_on_axis * value : x,
+            y: isY ? y + direction_on_axis * value : y
+        }
+    }
+
+    isPlayerHere = (hunter) => {
+        const { player } = this.props;
+        const sameX = player.x === hunter.x;
+        const sameY =  player.y === hunter.y;
+    
+        if (sameX) {
+            return { y: player.y, x: player.x }
+        } else if (sameY) {
+            return { y: player.y, x: player.x }
+        } else return false;
+    }
+
+    findFreeCell = (type, hunter) => {
+        const { player, map_ } = this.props;
+        const IPH = this.isPlayerHere(hunter);
+        if (IPH) return IPH
+                
+        switch(type) {
+            case 0:
+                const startX = 1, startY = 1;
+                const stopX = map_[0].length - 1, stopY = map_.length - 1;
+                for(let y = startY; y < stopY; y++) {
+                    for (let x = startX; x < stopX; x++) {
+                        if (map_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
+                            return { y, x };
+                        }
+                    }
+                }
+                break;
+            case 1:
+                for(let y = map_.length - 2; y > 1; y--) {
+                    for (let x = map_[0].length - 2; x > 1; x--) {
+                        if (map_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
+                            return { y, x };
+                        }
+                    }
+                } 
+                break;
+            case 2:
+                for (let x = map_[0].length - 2; x > 1; x--) {
+                    for(let y = 1; y < map_.length - 1; y++) {
+                        if (map_[y][x] === 1 && !hunter.passedCells.includes(y + '' + x)) {
+                            return { y, x };
+                        }
+                    }
+                }
+            break;
+            default:
+                return { y: player.y, x: player.x }
+        }
+    
+        
+    }
+
+    findPath = (type, hunter) => {
+  
+        const FSTART = this.FINDING_GRAPH.grid[hunter.y][hunter.x];
+        const { y, x } = this.findFreeCell(type, hunter);
+        const FEND = this.FINDING_GRAPH.grid[y][x];
+        const PATH = astar.search(this.FINDING_GRAPH, FSTART, FEND).map(item => ({ y: item.x, x: item.y}));
+        
+        return PATH.map((item,i) => {
+            if (i === 0) {
+                if (item.x > hunter.x) return RIGHT;
+                else if (item.x < hunter.x) return LEFT;
+                else if (item.y > hunter.y) return DOWN;
+                else if (item.y < hunter.y) return UP;
+            } else {
+                if (item.x > PATH[i-1].x) return RIGHT;
+                else if (item.x < PATH[i-1].x) return LEFT;
+                else if (item.y > PATH[i-1].y) return DOWN;
+                else if (item.y < PATH[i-1].y) return UP;
+            }
+        });
+    }
+
+    drawHunter = () => {
+        const { hunter1 } = this.props;
+        const ctx = this.refs.canvas.getContext('2d');
+
+        if (!hunter1.currentStep) {
+            const path = this.findPath(0, hunter1);
+            this.props.dispatch(setPath("8xf0y6ziyjabvozdd253nd",path));
+            this.props.dispatch(setHunterDirection("8xf0y6ziyjabvozdd253nd"));
+        }
+
+        const { hunter1: hunter, game } = this.props;
+    
+        let X = hunter.x * CELL_WIDTH;
+        let Y = hunter.y * CELL_WIDTH;
+    
+        if (!game.pause) {
+            const {x, y} = hunter.currentStep ? this.setHunterPosition(X,Y, hunter.currentStep, game.timer) : { x: X, y: Y};
+    
+            X = x;
+            Y = y;
+
+            // store.dispatch({ type: SAVE_HUNTER, x, y});
+           
+        } 
+        // else {
+        //     if (game.index < hunter.history.length) {
+        //         const { x: x1, y: y1 } = hunter.history[game.index];
+        //         const x = x1 / CELL_WIDTH;
+        //         const y = y1 / CELL_WIDTH;
+        //         if (Number.isInteger(x) && Number.isInteger(y)) store.dispatch({ type: SET_HUNTER_POSITION_FROM_HISTORY, x, y})
+                
+        //         X = x1;
+        //         Y = y1;
+        //     }
+            
+        // }
+    
+        ctx.beginPath();
+        ctx.fillStyle = HUNTER_COLOR;
+        ctx.rect(X, Y, CELL_WIDTH, CELL_WIDTH);
+        ctx.fill();
+        ctx.closePath();
+    }
+
     updateCanvas() {
         const ctx = this.refs.canvas.getContext('2d');
         ctx.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -215,21 +356,24 @@ class Canvas extends Component {
     }
 
     animate = () => {
-        const { game, map_ } = this.props;
+        const { game, map_, hunter1 } = this.props;
         this.frameId = window.requestAnimationFrame(this.animate)
         this.frame++;
 
         if (this.frame % FPS === 0) {
             if (!game.pause) {
                 if (game.timer === 0) {
+                    hunter1.alive && this.props.dispatch(setHunterPosition("8xf0y6ziyjabvozdd253nd"));
+                    hunter1.alive && this.props.dispatch(setHunterDirection("8xf0y6ziyjabvozdd253nd"));
                     this.props.dispatch(setPlayerPosition(map_));
-                    this.props.dispatch(setPlayerDirection())
+                    this.props.dispatch(setPlayerDirection());
                 }
             }
 
             this.clearWindow();
             this.drawMap();
             this.drawPlayer();
+            hunter1.alive && this.drawHunter();
             this.props.dispatch(setTimer());
         }
     }

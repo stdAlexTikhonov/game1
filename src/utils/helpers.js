@@ -28,6 +28,13 @@ export const setPlayerPosition = (player, MAP_) => {
 
 }
 
-export const setHunterPosition = () => {
-    //for a while
+export const setHunterPosition = (x,y,direction, value = 1) => {
+    const { axis, direction_on_axis } = DIRECTION_MAPPING[direction];
+    const isX = axis === 'x';
+    const isY = axis === 'y';
+
+    return {
+        x: isX ? x + direction_on_axis * value : x,
+        y: isY ? y + direction_on_axis * value : y
+    }
 }
