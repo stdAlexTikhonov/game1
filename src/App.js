@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { handleInitialData } from './actions/shared' 
 import Canvas from './Canvas'
+import MenuComponent from './MenuScreen/components/MenuComponent'
 import SplashComponent from './Splash/components/SplashComponent'
+import { Route } from 'react-router-dom'
 
 
 class App extends Component {
@@ -21,7 +23,10 @@ class App extends Component {
   render() {
     const { showSplash } = this.state;
     return (<div>
-      {showSplash ? <SplashComponent /> : <Canvas />}
+      <Route exact path='/' render={() => (
+        showSplash ? <SplashComponent /> : <MenuComponent />
+      )} />
+      <Route path='/game' component={Canvas} />
     </div>
     );
   }
