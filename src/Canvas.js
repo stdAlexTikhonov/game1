@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
+import { handleInitialData } from './actions/shared' 
 import {
     FPS,
     CELL_WIDTH,
@@ -68,6 +68,8 @@ class Canvas extends Component {
         this.pointerY = undefined;
         this.FINDING_GRAPH = new Graph(map_);
         this.start();
+
+        console.log('history', this.props.history);
     }
 
 
@@ -175,7 +177,11 @@ class Canvas extends Component {
         if (player.killer && phSame && ph < 2) this.props.dispatch(killHunter("8xf0y6ziyjabvozdd253nd"));
         else if (player.killer && ph2Same && ph2 < 2) this.props.dispatch(killHunter("8xf0y6ziyjabvozdd253n2"));
         else if (player.killer && ph3Same && ph3 < 2) this.props.dispatch(killHunter("8xf0y6ziyjabvozdd253n3"));
-        else if (flag) this.props.dispatch(stop());
+        else if (flag) { 
+            this.props.dispatch(stop()); 
+            this.props.dispatch(handleInitialData());
+            this.props.history.push('/end');
+        }
     }
    
     drawPlayer = () => {
