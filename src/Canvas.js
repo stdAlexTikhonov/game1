@@ -68,8 +68,6 @@ class Canvas extends Component {
         this.pointerY = undefined;
         this.FINDING_GRAPH = new Graph(map_);
         this.start();
-
-        console.log('history', this.props.history);
     }
 
 
