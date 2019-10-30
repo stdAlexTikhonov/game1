@@ -18,3 +18,7 @@ export const getUserSelector = createSelector([getUsersSelector], users => users
 
 export const getGameSelector = state => state.game;
 
+export const getMapsSelector = state => state.game.maps;
+
+export const getIndexSelector = state => state.game.index;
+

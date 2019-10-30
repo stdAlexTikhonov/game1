@@ -5,7 +5,8 @@ import {
     SET_INDEX,
     SET_TIMER,
     PAUSE,
-    RESET_TIMELINE
+    RESET_TIMELINE,
+    SET_MAP
 } from '../actions/game'
 import { CELL_WIDTH, STEP } from '../utils/constants'
 
@@ -47,6 +48,11 @@ export default function game (state = {}, action) {
                     ...state,
                     direction: null,
                     index: 0
+                }
+            case SET_MAP:
+                return {
+                    ...state,
+                    map: state.maps[action.index].split('-').map(arr => arr.split('').map(elem => +elem))
                 }
         default:
             return state;
