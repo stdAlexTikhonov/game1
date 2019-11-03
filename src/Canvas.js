@@ -451,8 +451,18 @@ class Canvas extends Component {
             <div style={{
                 height: '100vh',
                 width: '100%',
-                background: 'red'
-            }}><canvas ref="canvas" onPointerDown={this.pointerDown} onPointerMove={this.pointerMove} onClick={this.clickHandle} onDoubleClick={this.dblClickHandle} width={WINDOW_WIDTH} height={WINDOW_HEIGHT} style={{ width: '100%', height: '100vh' }} /></div>
+                display: 'flex'
+            }}>
+                <canvas 
+                    ref="canvas" 
+                    onPointerDown={this.pointerDown} 
+                    onPointerMove={this.pointerMove} 
+                    onClick={this.clickHandle} 
+                    onDoubleClick={this.dblClickHandle} 
+                    width={WINDOW_WIDTH} height={WINDOW_HEIGHT} 
+                    style={{margin: 'auto'}} 
+                />
+            </div>
         );
     }
 }
