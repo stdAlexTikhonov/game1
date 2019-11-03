@@ -91,7 +91,7 @@ const users = {
     lastUserDirection: null,
     previousDirection: null,
     points: 0,
-    turboscores: 10,
+    turboscores: 0,
     isTurboActive: false,
     foodMap: ['11'],
     history: [],
