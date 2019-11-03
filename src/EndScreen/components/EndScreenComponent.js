@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import '../styles.css'
 import { setMap } from '../../actions/game'
 import { getIndexSelector } from '../../selectors/test'
-import {
-    endScreenStyle,
-    innerBlockStyle,
-    titleStyle,
-    btnStyle,
-    exitBtn
-} from '../styles'
+
 
 
 class EndScreenComponent extends Component {
@@ -17,13 +12,13 @@ class EndScreenComponent extends Component {
     handleClick = () => this.props.dispatch(setMap(this.props.index));
 
     render() {
-        console.log(this.props)
+        const { flag } = this.props;
         return (
-            <div style={endScreenStyle}>
-                <div style={innerBlockStyle}>
-                    <div style={titleStyle}>YOU DEAD</div>
-                    <Link to='/game' style={btnStyle} onClick={this.handleClick}>Retry</Link>
-                    <Link to='/' style={exitBtn}>Main Menu</Link>
+            <div className={flag ? 'endScreenStyle opacity0' : 'endScreenStyle'}>
+                <div className={'innerBlockStyle'}>
+                    <div className={'titleStyle'}>YOU DEAD</div>
+                    {!flag && <Link to='/game' className={'btnStyle'} onClick={this.handleClick}>Retry</Link> }
+                    {!flag && <Link to='/' className={'btnStyle exitBtn'}>Main Menu</Link> }
                 </div>
             </div>
         )

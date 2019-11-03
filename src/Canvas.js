@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { handleInitialData } from './actions/shared' 
+import { handleInitialData } from './actions/shared'
+import EndScreenComponent from './EndScreen/components/EndScreenComponent'
 import {
     FPS,
     CELL_WIDTH,
@@ -17,8 +18,7 @@ import {
     UP, DOWN, RIGHT, LEFT
 } from './utils/constants'
 import { 
-    setTimer, 
-    pause, 
+    setTimer,
     start,
     stop
 } from './actions/game'
@@ -60,7 +60,6 @@ const height = window.innerHeight,
 class Canvas extends Component {
     componentDidMount() {
         const { map_ } = this.props;
-
         this.frame = 0;
         this.clicks = false;
         this.timer = null;
@@ -69,6 +68,10 @@ class Canvas extends Component {
         this.pointerY = undefined;
         this.FINDING_GRAPH = new Graph(map_);
         this.start();
+    }
+
+    state = {
+        end: false
     }
 
 
@@ -178,8 +181,10 @@ class Canvas extends Component {
         else if (player.killer && ph3Same && ph3 < 2) this.props.dispatch(killHunter("8xf0y6ziyjabvozdd253n3"));
         else if (flag) { 
             this.props.dispatch(stop()); 
-            this.props.dispatch(handleInitialData());
-            this.props.history.push('/end');
+            this.props.dispatch(handleInitialData()).then(() => {
+                this.props.history.push('/end');
+            });
+            this.setState({ end: true});
         }
     }
    
@@ -463,6 +468,7 @@ class Canvas extends Component {
                     width={WINDOW_WIDTH} height={WINDOW_HEIGHT} 
                     style={{margin: 'auto'}} 
                 />
+                {this.state.end && <EndScreenComponent flag={true}/>}
             </div>
         );
     }
