@@ -6,7 +6,7 @@
 
 }
 
-.innerBlockStyle { margin: auto; font-weight: bold; display: flex; flex-direction: column; padding: 20px; height: 500px; }
+.innerBlockStyle { margin: auto; font-weight: bold; display: flex; flex-direction: column; padding: 20px; }
 
 .titleStyle { font-size: 100pt; flex-grow: 1; color: red }
 

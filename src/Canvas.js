@@ -20,7 +20,8 @@ import {
 import { 
     setTimer,
     start,
-    stop
+    stop,
+    setMapPosition
 } from './actions/game'
 import {
     swipeUp, 
@@ -193,6 +194,7 @@ class Canvas extends Component {
         const { game, player, map_ } = this.props;
         let { isTurboActive, turboscores } = player;
         const { X, Y } = this.nextPlayerMove();
+        this.props.dispatch(setMapPosition(X,Y));
         // if (!game.pause) store.dispatch({ type: SAVE, x: X, y: Y}); 
         ctx.beginPath();
         ctx.arc(X, Y, CELL_WIDTH / 2, 0, 2 * Math.PI, false);
@@ -453,20 +455,30 @@ class Canvas extends Component {
     }
 
     render() {
+        const { game } = this.props;
         return (
             <div style={{
                 height: '100vh',
                 width: '100%',
-                display: 'flex'
-            }}>
+                display: 'flex',
+                position: 'relative',
+                overflow: 'hidden',
+                background: 'black'
+            }}
+                 onPointerDown={this.pointerDown}
+                 onPointerMove={this.pointerMove}
+                 onClick={this.clickHandle}
+                 onDoubleClick={this.dblClickHandle}
+            >
                 <canvas 
-                    ref="canvas" 
-                    onPointerDown={this.pointerDown} 
-                    onPointerMove={this.pointerMove} 
-                    onClick={this.clickHandle} 
-                    onDoubleClick={this.dblClickHandle} 
+                    ref="canvas"
                     width={WINDOW_WIDTH} height={WINDOW_HEIGHT} 
-                    style={{margin: 'auto'}} 
+                    style={{
+                        transformOrigin: '0 0',
+                        position: 'absolute',
+                        top: height/2 - game.Y + 'px',
+                        left: width/2 - game.X + 'px'
+                        }}
                 />
                 {this.state.end && <EndScreenComponent flag={true}/>}
             </div>

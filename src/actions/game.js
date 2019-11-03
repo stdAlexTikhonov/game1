@@ -7,6 +7,7 @@ export const PAUSE = 'PAUSE';
 export const SET_INDEX = 'SET_INDEX';
 export const RESET_TIMELINE = 'RESRT_TIMELINE';
 export const SET_MAP = 'SET_MAP';
+export const SET_MAP_POSITION = 'SET_MAP_POSITION';
 
 export function receiveGameData(game) {
     return {
@@ -64,5 +65,13 @@ export function setMap(index) {
     return {
         type: SET_MAP,
         index
+    }
+}
+
+export function setMapPosition(X,Y) {
+    return {
+        type: SET_MAP_POSITION,
+        X,
+        Y
     }
 }
