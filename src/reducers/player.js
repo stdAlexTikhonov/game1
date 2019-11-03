@@ -98,13 +98,14 @@ export default function users (state = {}, action) {
             case TURBOBOOST:
                 return {
                     ...state,
-                    isTurboActive: true,
-                    killer: true
+                    isTurboActive: state.turboscores >= 30,
+                    killer: state.turboscores >= 30
                 }
             case SLOWDOWN:
                 return {
                     ...state,
-                    isTurboActive: false
+                    isTurboActive: false,
+                    turboscores: 0
                 }
             case STOP_KILLER:
                 return {
