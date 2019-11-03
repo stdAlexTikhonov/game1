@@ -446,7 +446,7 @@ class Canvas extends Component {
     }
 
     render() {
-
+        const { player } = this.props;
         return (
             <div style={{
                 height: '100vh',
@@ -462,6 +462,7 @@ class Canvas extends Component {
                     width={WINDOW_WIDTH} height={WINDOW_HEIGHT} 
                     style={{margin: 'auto'}} 
                 />
+                <h2 style={{position: 'absolute', top: 0, left: 0}}>{player.turboscores}</h2>
             </div>
         );
     }
