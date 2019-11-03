@@ -9,6 +9,7 @@ import {
     WINDOW_WIDTH,
     BACKGROUND,
     PLAYER_COLOR,
+    TURBO_IS_READY,
     DIRECTION_MAPPING,
     FOOD_COLOR,
     FOOD_SIZE,
@@ -190,7 +191,7 @@ class Canvas extends Component {
         // if (!game.pause) store.dispatch({ type: SAVE, x: X, y: Y}); 
         ctx.beginPath();
         ctx.arc(X, Y, CELL_WIDTH / 2, 0, 2 * Math.PI, false);
-        ctx.fillStyle = PLAYER_COLOR;
+        ctx.fillStyle = turboscores < 30 ? PLAYER_COLOR : TURBO_IS_READY;
         ctx.fill();
         ctx.closePath();
         if (isTurboActive) {
@@ -447,7 +448,6 @@ class Canvas extends Component {
     }
 
     render() {
-        const { player } = this.props;
         return (
             <div style={{
                 height: '100vh',
@@ -463,7 +463,6 @@ class Canvas extends Component {
                     width={WINDOW_WIDTH} height={WINDOW_HEIGHT} 
                     style={{margin: 'auto'}} 
                 />
-                <h2 style={{position: 'absolute', top: 0, left: 0}}>{player.turboscores}</h2>
             </div>
         );
     }
