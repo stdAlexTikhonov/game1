@@ -11,7 +11,8 @@ import {
     SAVE,
     TURBOBOOST,
     SLOWDOWN,
-    STOP_KILLER
+    STOP_KILLER,
+    turboBoost
  } from '../actions/player'
  import { 
      HISTORY_LENGTH,
@@ -58,13 +59,16 @@ export default function users (state = {}, action) {
                     y: action.y
                 }
             case SET_PLAYER_POSITION: {
-                let {x, y} = state;
+                let {x, y, turboscores} = state;
                 const { x: newx, y: newy} = state.direction ? setPlayerPosition(state, action.map_) : { x, y};
+
+                const foodFlag = state.foodMap.includes(`${newy + '' + newx}`);
                 return {
                     ...state,
-                    points: state.direction && !state.foodMap.includes(`${newy + '' + newx}`) ? state.points + 1 : state.points,
-                    // turboscores: state.turboscores < 10 && !state.foodMap.includes(`${newy + '' + newx}`) ? state.turboscores + 1 : state.turboscores,
-                    foodMap: state.foodMap.includes(`${newy + '' + newx}`) ? state.foodMap : state.foodMap.concat([`${newy + '' + newx}`]),
+                    points: state.direction && !foodFlag ? state.points + 1 : state.points,
+                    //turboscores: state.turboscores < 10 && !state.foodMap.includes(`${newy + '' + newx}`) ? state.turboscores + 1 : state.turboscores,
+                    turboscores: foodFlag ? turboscores : turboscores + 1,
+                    foodMap: foodFlag ? state.foodMap : state.foodMap.concat([`${newy + '' + newx}`]),
                     x: newx,
                     y: newy,
                 }

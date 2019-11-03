@@ -195,11 +195,12 @@ class Canvas extends Component {
         ctx.closePath();
         if (isTurboActive) {
             this.props.dispatch(slowDown());
-            while(turboscores > 0) {
+            let ten = 10;
+            while(ten > 0) {
                 this.props.dispatch(setPlayerPosition(map_));
                 this.props.dispatch(setPlayerDirection()); 
                 this.drawPlayer();
-                turboscores--;
+                ten--;
                 this.getDistances();
             }
             this.props.dispatch(stopKiller());
