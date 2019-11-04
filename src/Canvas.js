@@ -405,20 +405,7 @@ class Canvas extends Component {
         }
     }
 
-    clickHandle = () => {
-        const self = this;
-        this.timer = setTimeout(function () {
-            // if (!self.clicks) self.props.dispatch(pause())
-            self.clicks = false;
-        }, 300);
-
-    }
-
-    dblClickHandle = () => {
-        this.clicks = true;
-        clearTimeout(this.timer)
-        this.props.dispatch(turboBoost())
-    }
+    clickHandle = () => this.props.dispatch(turboBoost());
 
     pointerDown = (e) => {
         const { game } = this.props;
@@ -436,12 +423,6 @@ class Canvas extends Component {
         const diffUp = e.nativeEvent.offsetY - this.pointerY;
         const vertical = Math.abs(diffLeft) < Math.abs(diffUp);
 
-        //    if (this.gamePause) {
-        //         store.dispatch({ type: RESET_TIMELINE });
-        //         const PATH = findPath();
-        //         store.dispatch({ type: SET_PATH, path: PATH });
-        //         store.dispatch({ type: SET_HUNTER_DIRECTION });
-        //     }
 
         if (vertical) {
             if (e.nativeEvent.offsetY > this.pointerY) this.props.dispatch(swipeDown());
@@ -468,7 +449,6 @@ class Canvas extends Component {
                  onPointerDown={this.pointerDown}
                  onPointerMove={this.pointerMove}
                  onClick={this.clickHandle}
-                 onDoubleClick={this.dblClickHandle}
             >
                 <canvas 
                     ref="canvas"
