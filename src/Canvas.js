@@ -17,11 +17,11 @@ import {
     HUNTER_COLOR,
     UP, DOWN, RIGHT, LEFT
 } from './utils/constants'
-import { 
+import {
     setTimer,
     start,
     stop,
-    setMapPosition
+    setMapPosition, setIndex
 } from './actions/game'
 import {
     swipeUp, 
@@ -155,7 +155,7 @@ class Canvas extends Component {
     }
 
     getDistances = () => {
-        const { player, hunter1, hunter2, hunter3 } = this.props;
+        const { player, hunter1, hunter2, hunter3, game } = this.props;
     
         //hunter1 + player
         const aph = Math.pow(player.x - hunter1.x, 2);
@@ -183,7 +183,8 @@ class Canvas extends Component {
         else if (flag) { 
             this.props.dispatch(stop()); 
             this.props.dispatch(handleInitialData()).then(() => {
-                this.props.history.push('/end');
+                this.props.history.push('/end/');
+                this.props.dispatch(setIndex(game.index));
             });
             this.setState({ end: true});
         }
