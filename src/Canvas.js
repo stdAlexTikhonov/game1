@@ -69,10 +69,31 @@ class Canvas extends Component {
         this.pointerY = undefined;
         this.FINDING_GRAPH = new Graph(map_);
         this.start();
+
+        const self = this;
+
+        document.addEventListener("message", function(event) {
+            switch(event.data) {
+                case "UP":
+                    self.props.dispatch(swipeUp());
+                    break;
+                case "DOWN":
+                    self.props.dispatch(swipeDown());
+                    break;
+                case "LEFT":
+                    self.props.dispatch(swipeLeft());
+                    break;
+                case "RIGHT":
+                    self.props.dispatch(swipeRight());
+                    break;
+            }
+
+        });
     }
 
     state = {
-        end: false
+        end: false,
+        post: 0
     }
 
 
@@ -439,7 +460,7 @@ class Canvas extends Component {
     render() {
         const { game } = this.props;
         return (
-            <div style={{
+            <div ref={component => this.canvas = component} style={{
                 height: '100vh',
                 width: '100%',
                 display: 'flex',
@@ -447,8 +468,9 @@ class Canvas extends Component {
                 overflow: 'hidden',
                 background: 'black'
             }}
-                 onPointerDown={this.pointerDown}
-                 onPointerMove={this.pointerMove}
+                 // onPointerDown={this.pointerDown}
+                 // onPointerMove={this.pointerMove}
+
                  onClick={this.clickHandle}
             >
                 <canvas 
@@ -480,5 +502,7 @@ function mapStateToProps(state) {
         game: getGameSelector(state)
     }
 }
+
+
 
 export default connect(mapStateToProps)(Canvas)
